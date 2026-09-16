@@ -543,9 +543,21 @@ table.glance .mid{color:var(--t-connect);font-weight:600}
 .photogrid a:hover img{opacity:.88}
 
 /* ============================ event poster gallery ============================ */
-.postergrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.5rem;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
+.postergrid{
+  display:flex;gap:1.25rem;overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;padding-bottom:1rem;
+  margin-bottom:clamp(2.5rem,5vw,3.5rem);
+  scrollbar-width:thin;scrollbar-color:var(--rule) transparent;
+}
+.postergrid::-webkit-scrollbar{height:8px}
+.postergrid::-webkit-scrollbar-track{background:var(--rule-2);border-radius:4px}
+.postergrid::-webkit-scrollbar-thumb{background:var(--rule);border-radius:4px}
+.postergrid::-webkit-scrollbar-thumb:hover{background:var(--ink-3)}
 .postergrid:empty{display:none}
-.postergrid figure{margin:0;display:flex;flex-direction:column}
+.postergrid figure{margin:0;display:flex;flex-direction:column;flex:0 0 232px;scroll-snap-align:start}
+.postergrid a{display:block;line-height:0}
+.postergrid a:hover img{opacity:.88}
+.postergrid img{transition:opacity .16s ease}
 .postergrid figcaption{margin-bottom:.6rem}
 .postergrid .t{display:block;font-family:var(--display);font-weight:600;font-size:.95rem;line-height:1.3;color:var(--ink)}
 .postergrid .d{
@@ -784,7 +796,7 @@ footer.site{position:relative}
       <div class="sechead" id="posterHead" hidden>
         <p class="lab">Posters</p>
         <h2>Event Posters</h2>
-        <p>The poster for each event we have run, newest first.</p>
+        <p>The poster for each event we have run, newest first. Scroll sideways; select one to see it full size.</p>
       </div>
       <div class="postergrid" id="posterGrid"></div>
 
@@ -2025,7 +2037,7 @@ function fillPortraits(){
    file into posters/ is all it takes: 2024-10-30-grad-panel.png              */
 function posterSlug(e){
   var t=e.t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
-  return "posters/"+e.d+"-"+t+".png";
+  return "posters/"+e.d+"-"+t;          /* extension tried separately */
 }
 function renderPosters(){
   var grid=document.getElementById("posterGrid"),head=document.getElementById("posterHead");
@@ -2041,11 +2053,20 @@ function renderPosters(){
     fig.innerHTML='<figcaption><span class="t"></span><span class="d"></span></figcaption>';
     fig.querySelector(".t").textContent=e.t;
     fig.querySelector(".d").textContent=when;
+    var base=posterSlug(e), exts=[".jpg",".jpeg",".png"], k=0;
     var img=document.createElement("img");
     img.alt="Poster for "+e.t;
-    img.addEventListener("load",function(){fig.hidden=false;shown++;head.hidden=false;});
-    img.addEventListener("error",function(){fig.remove();});
-    img.src=posterSlug(e);
+    img.loading="lazy";
+    img.addEventListener("load",function(){
+      fig.hidden=false;shown++;head.hidden=false;
+      var a=document.createElement("a");
+      a.href=img.src;a.target="_blank";a.rel="noopener";
+      img.parentNode.insertBefore(a,img);a.appendChild(img);
+    });
+    img.addEventListener("error",function(){
+      if(++k<exts.length){img.src=base+exts[k];}else{fig.remove();}
+    });
+    img.src=base+exts[0];
     fig.appendChild(img);
     grid.appendChild(fig);
   });
