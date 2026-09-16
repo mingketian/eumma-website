@@ -2056,7 +2056,6 @@ function renderPosters(){
     var base=posterSlug(e), exts=[".jpg",".jpeg",".png"], k=0;
     var img=document.createElement("img");
     img.alt="Poster for "+e.t;
-    img.loading="lazy";
     img.addEventListener("load",function(){
       fig.hidden=false;shown++;head.hidden=false;
       var a=document.createElement("a");
