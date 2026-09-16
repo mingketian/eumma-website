@@ -70,12 +70,51 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     io.open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(s)
     io.open(os.path.join(OUT, ".nojekyll"), "w").write("")
-    for name in ("qr-groupme.png", "qr-wechat.png", "eumma-poster-2025.png"):
-        for sub in ("", "poster", "qr"):
-            src = os.path.join(ASSETS, sub, name)
-            if os.path.exists(src):
-                shutil.copy2(src, os.path.join(OUT, name)); print(f"  copied {name}")
-                break
+    # ---- assets -------------------------------------------------------
+    # Images are resized for the web on the way in: a 6 MB camera PNG makes the
+    # page unusable on a phone, and nothing here is displayed above ~1200px.
+    from PIL import Image
+
+    MAXW = 1800
+    def emit(src, dst):
+        try:
+            im = Image.open(src)
+        except Exception:
+            shutil.copy2(src, dst); return os.path.getsize(dst)
+        if im.width > MAXW:
+            im = im.resize((MAXW, round(im.height * MAXW / im.width)), Image.LANCZOS)
+        if dst.lower().endswith(".png"):
+            im.convert("RGBA" if im.mode in ("RGBA", "LA") else "RGB").save(dst, "PNG", optimize=True)
+        else:
+            im.convert("RGB").save(dst, "JPEG", quality=82, optimize=True, progressive=True)
+        return os.path.getsize(dst)
+
+    # start from a clean slate so renamed or removed assets do not linger
+    for f in os.listdir(OUT):
+        full = os.path.join(OUT, f)
+        if os.path.isfile(full) and f not in ("index.html", ".nojekyll"):
+            os.remove(full)
+
+    total = 0
+    for sub in ("poster", "qr"):
+        d = os.path.join(ASSETS, sub)
+        if not os.path.isdir(d): continue
+        for f in sorted(os.listdir(d)):
+            if f.startswith("."): continue
+            total += emit(os.path.join(d, f), os.path.join(OUT, f))
+            print(f"  {f}")
+    for sub in ("posters", "people", "photos"):
+        srcd, dstd = os.path.join(ASSETS, sub), os.path.join(OUT, sub)
+        shutil.rmtree(dstd, ignore_errors=True)
+        if not os.path.isdir(srcd): continue
+        files = [f for f in sorted(os.listdir(srcd)) if not f.startswith(".")]
+        if not files: continue
+        os.makedirs(dstd, exist_ok=True)
+        for f in files:
+            total += emit(os.path.join(srcd, f), os.path.join(dstd, f))
+        print(f"  {sub}/  {len(files)} file(s)")
+    if total: print(f"  images total: {total//1024} KB")
+
     print(f"\nwrote {OUT}/index.html")
 
 main()

@@ -392,6 +392,17 @@ table.glance .mid{color:var(--t-connect);font-weight:600}
 .row{display:grid;grid-template-columns:1fr auto;gap:.5rem 1.5rem;padding:1.2rem 0 1.2rem 1.1rem;border-bottom:1px solid var(--rule-2);border-left:2px solid var(--h,transparent);transition:background .16s ease}
 .row:hover{background:var(--w,transparent)}
 .row.plain{padding-left:0;border-left:0}
+.row.who{grid-template-columns:96px minmax(0,1fr) auto;gap:.5rem 1.4rem;align-items:start}
+.row.who .ph{
+  width:96px;aspect-ratio:1/1;background:var(--paper);border:1px solid var(--rule);
+  display:grid;place-items:center;overflow:hidden;
+}
+.row.who .ph img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:640px){
+  .row.who{grid-template-columns:72px minmax(0,1fr)}
+  .row.who .ph{width:72px}
+  .row.who .right{grid-column:2;margin-top:.3rem}
+}
 .row h3{font-size:1rem;font-weight:600}
 .row .meta{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);margin-top:.3rem;display:flex;flex-wrap:wrap;gap:.25rem .9rem}
 .row p{font-size:.885rem;color:var(--ink-2);margin-top:.45rem;max-width:68ch}
@@ -518,6 +529,18 @@ table.glance .mid{color:var(--t-connect);font-weight:600}
 @media(max-width:760px){.faq{grid-template-columns:1fr;gap:1.3rem}}
 .faq h3{font-size:.95rem;font-weight:600;margin-bottom:.3rem}
 .faq p{font-size:.865rem;color:var(--ink-2)}
+
+/* ============================ event photographs ============================ */
+.photogrid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);
+}
+.photogrid img{
+  display:block;width:100%;aspect-ratio:4/3;object-fit:cover;
+  background:var(--paper);transition:opacity .16s ease;
+}
+.photogrid a{display:block;line-height:0}
+.photogrid a:hover img{opacity:.88}
 
 /* ============================ event poster gallery ============================ */
 .postergrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.5rem;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
@@ -718,6 +741,16 @@ footer.site{position:relative}
           <div class="legend" id="calKey"></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="blk tint" id="photo-block" hidden>
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Photographs</p>
+        <h2>From Our Events</h2>
+      </div>
+      <div class="photogrid" id="photoGrid"></div>
     </div>
   </section>
 
@@ -1151,41 +1184,46 @@ footer.site{position:relative}
         <p>Faculty who have spoken at EUMMA panels. Our events exist because they say yes.</p>
       </div>
       <div class="rows">
-        <div class="row" data-h="connect">
+        <div class="row who" data-h="connect">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Dr. David Borthwick</h3>
+            <h3>David Borthwick</h3>
             <div class="meta"><span>Professor · Interim Chair</span><span>Dept. of Mathematics</span></div>
             <p>Spoke at our Grad Panel in October 2024 on post-graduate academic paths and how to prepare for them. Faculty advisor to the Directed Reading Program.</p>
           </div>
           <div class="right"><span class="cat" data-h="connect"><i></i>Grad Panel</span></div>
         </div>
-        <div class="row" data-h="research">
+        <div class="row who" data-h="research">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Prof. Elizabeth Newman</h3>
+            <h3>Elizabeth Newman</h3>
             <div class="meta"><span>Assistant Professor</span><span>Computational mathematics</span></div>
             <p>Took part in our Undergraduate Research Panels in October 2023 and October 2024, on how undergraduates find a first research project.</p>
           </div>
           <div class="right"><span class="cat" data-h="research"><i></i>Research Panel</span></div>
         </div>
-        <div class="row" data-h="research">
+        <div class="row who" data-h="research">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Prof. Michelangelo Grigni</h3>
+            <h3>Michelangelo Grigni</h3>
             <div class="meta"><span>Joint Faculty</span><span>Discrete mathematics</span></div>
             <p>Discrete mathematics and algorithms.</p>
           </div>
           <div class="right"><span class="cat" data-h="research"><i></i>Panel Guest</span></div>
         </div>
-        <div class="row" data-h="research">
+        <div class="row who" data-h="research">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Prof. Alessandro Veneziani</h3>
+            <h3>Alessandro Veneziani</h3>
             <div class="meta"><span>Professor</span><span>Scientific computing</span></div>
             <p>Applied mathematics, partial differential equations, and cardiovascular modeling: numerical analysis carried from the theorem to the operating room.</p>
           </div>
           <div class="right"><span class="cat" data-h="research"><i></i>Research Panel</span></div>
         </div>
-        <div class="row" data-h="research">
+        <div class="row who" data-h="research">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Prof. Liana Yepremyan</h3>
+            <h3>Liana Yepremyan</h3>
             <div class="meta"><span>Assistant Professor</span><span>Discrete mathematics</span></div>
             <p>Extremal combinatorics and graph theory. Awarded the 2025 Emil Artin Junior Prize in Mathematics.</p>
           </div>
@@ -1202,39 +1240,44 @@ footer.site{position:relative}
         <h2>Faculty and Staff</h2>
       </div>
       <div class="rows">
-        <div class="row" data-h="ai">
+        <div class="row who" data-h="ai">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Dr. James G. Nagy</h3>
+            <h3>James G. Nagy</h3>
             <div class="meta"><span>Samuel Candler Dobbs Professor</span><span>Dept. of Mathematics</span></div>
             <p>Numerical linear algebra, scientific computing, and ill-posed inverse problems in signal and image processing.</p>
           </div>
           <div class="right"><span class="cat" data-h="ai"><i></i>Scientific Computing</span></div>
         </div>
-        <div class="row" data-h="research">
+        <div class="row who" data-h="research">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Dr. Manuela Manetta</h3>
+            <h3>Manuela Manetta</h3>
             <div class="meta"><span>Associate Teaching Professor</span><span>Dept. of Mathematics</span></div>
             <p>Honors Program Coordinator for the mathematics major, and the person to talk to about writing an honors thesis.</p>
           </div>
           <div class="right"><span class="cat" data-h="research"><i></i>Honors Program</span></div>
         </div>
-        <div class="row" data-h="ai">
+        <div class="row who" data-h="ai">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Dr. Yuanzhe Xi</h3>
+            <h3>Yuanzhe Xi</h3>
             <div class="meta"><span>Associate Professor</span><span>Dept. of Mathematics</span></div>
             <p>Scientific computing, numerical linear algebra, optimization, and deep learning. This is the mathematics directly underneath our Kaggle and machine learning sessions.</p>
           </div>
           <div class="right"><span class="cat" data-h="ai"><i></i>Scientific Computing</span></div>
         </div>
-        <div class="row" data-h="research">
+        <div class="row who" data-h="research">
+          <div class="ph" aria-hidden="true"></div>
           <div>
-            <h3>Dr. Andrew H. Lyons</h3>
+            <h3>Andrew H. Lyons</h3>
             <div class="meta"><span>Assistant Teaching Professor</span><span>Dept. of Mathematics</span></div>
             <p>Elliptic eigenvalue problems on compact manifolds with boundary. Joined Emory after completing his PhD at the University of North Carolina at Chapel Hill in 2025.</p>
           </div>
           <div class="right"><span class="cat" data-h="research"><i></i>Analysis</span></div>
         </div>
-        <div class="row" data-h="connect">
+        <div class="row who" data-h="connect">
+          <div class="ph" aria-hidden="true"></div>
           <div>
             <h3>Amy Dickson</h3>
             <div class="meta"><span>Undergraduate Program Coordinator</span><span>MSC W401A</span></div>
@@ -1506,9 +1549,13 @@ var EVENTS=[
   {d:"2026-12-05",t:"Finals Study Session",time:"TBC",room:"TBC",cat:"study",desc:"An open room through finals week with food, and upperclassmen who have already taken the course on hand. Bring the problem set you are stuck on."},
   {d:"2026-04-00",t:"Career Exploration Panel",time:"April 2026",room:"",cat:"connect",desc:"Where a mathematics degree actually goes. Speakers from industry, graduate programs, and the routes in between on how they chose and what the first year after Emory looked like."},
   {d:"2026-03-00",t:"Kaggle Competition Training II",time:"March 2026",room:"",cat:"ai",desc:"The second half of the Kaggle sequence: cross-validation that does not lie to you, feature engineering, and gradient boosting. We finish by reading the winning solutions."},
-  {d:"2026-02-00",t:"Kaggle Competition Training I",time:"February 2026",room:"",cat:"ai",desc:"From an empty notebook to a first submission in one session. Reading the brief, building a baseline, and getting a score on the leaderboard before touching anything clever."},
+  {d:"2025-09-26",t:"Kaggle Competition Training I",time:"2:00–3:00 PM",room:"MSC W303",cat:"ai",desc:"The first session of the program: an introduction to the Kaggle platform, a walk-through of basic feature engineering, and the Titanic survival prediction worked end to end."},
   {d:"2026-02-00",t:"Honors Thesis Panel",time:"February 2026",room:"",cat:"research",desc:"Seniors partway through a thesis on how they chose a topic, how they found an advisor, and how the writing is actually paced across two semesters."},
   {d:"2026-01-00",t:"AI4S&E Workshop",time:"January 2026",room:"",cat:"ai",desc:"AI for Science and Engineering, and the first session of its kind at EUMMA. Where machine learning is genuinely used on scientific problems, and the linear algebra and optimization underneath it."},
+  {d:"2025-12-12",t:"Math Group Study Sessions",time:"2:00–5:00 PM",room:"MSC W303",cat:"study",desc:"A quiet room through midterms and finals, with snacks. Run with the Department of Mathematics."},
+  {d:"2025-10-17",t:"Math Group Study Sessions",time:"2:00–5:00 PM",room:"MSC W303",cat:"study",desc:"A quiet room through midterms and finals, with snacks. Run with the Department of Mathematics."},
+  {d:"2025-10-08",t:"Math Major & Minor Panel",time:"4:00–5:00 PM",room:"MSC E208",cat:"connect",desc:"Pure, applied and interdisciplinary pathways: Math BS/BA, Applied Math and Statistics, Math with Economics, Political Science, Physics or CS. Course plans and Q&A with upperclassmen."},
+  {d:"2025-09-16",t:"General Body Meeting",time:"3:00–4:00 PM",room:"MSC E208",cat:"social",desc:"The opening meeting of the year: what EUMMA is running, how to get involved, and pizza."},
   {d:"2025-11-00",t:"Grad Panel",time:"November 2025",room:"",cat:"connect",desc:"Applying to mathematics graduate programs, with faculty and graduate students who have read the applications: what the statement of purpose is for, who to ask for letters, and when deadlines fall."},
   {d:"2025-10-00",t:"Undergraduate Research Panel",time:"October 2025",room:"",cat:"research",desc:"The annual research panel. Undergraduates describe the projects they joined and how they got in, alongside faculty on what they expect from a student who has never done research."},
   {d:"2025-09-00",t:"Networking with Industry Alumni",time:"September 2025",room:"",cat:"connect",desc:"Emory alumni now working in industry on what they actually do day to day, how the degree carried over, and what they would have done differently as undergraduates."},
@@ -1520,7 +1567,7 @@ var EVENTS=[
   {d:"2024-10-30",t:"Grad Panel",time:"5:30–6:30 PM",room:"MSC N304",cat:"connect",desc:"With Dr. David Borthwick, then Director of Graduate Studies, on post-graduate academic paths: what coursework matters, when to start asking for letters, and what an application is judged on."},
   {d:"2024-10-00",t:"Undergraduate Research Panel",time:"October 2024",room:"",cat:"research",desc:"Undergraduates describe how they found a first research project, with faculty who supervise undergraduate work on what they look for in a first email."},
   {d:"2023-10-00",t:"Undergraduate Research Panel",time:"October 2023",room:"",cat:"research",desc:"The first research panel EUMMA ran, and the format that became an annual fixture."},
-  {d:"2023-09-00",t:"Math Major & Minor Panel",time:"September 2023",room:"",cat:"connect",desc:"Current majors and minors answer what the catalog cannot: which courses in which order, how the major and minor differ in practice, and what to do if you are deciding late."}
+  {d:"2023-11-10",t:"Math Major & Minor Panel",time:"4:00–5:00 PM",room:"White Hall 112",cat:"connect",desc:"A session with Mike Carr, then Director of Undergraduate Studies, on navigating the math major and minor and what each path actually opens up."}
 ];
 var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 var MSHORT=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -1915,6 +1962,48 @@ window.addEventListener("resize",function(){
   clearTimeout(rt);rt=setTimeout(Field.resize,180);
 });
 
+/* Event photographs. Numbered files, probed in order: photos/01.jpg, 02.jpg …
+   The first gap ends the run, so numbering has to be consecutive.            */
+function loadPhotos(){
+  var grid=document.getElementById("photoGrid"),block=document.getElementById("photo-block");
+  if(!grid)return;
+  var MAX=40, shown=0;
+  function tryOne(i){
+    if(i>MAX)return;
+    var n=(i<10?"0":"")+i, src="photos/"+n+".jpg";
+    var img=new Image();
+    img.onload=function(){
+      var a=document.createElement("a");
+      a.href=src; a.target="_blank"; a.rel="noopener";
+      img.alt="EUMMA event photograph "+n;
+      a.appendChild(img); grid.appendChild(a);
+      block.hidden=false; shown++;
+      tryOne(i+1);
+    };
+    img.onerror=function(){ /* first gap ends the run */ };
+    img.src=src;
+  }
+  tryOne(1);
+}
+
+/* Portraits. The filename is derived from the person's own name, so adding a
+   photo is just dropping people/<name>.jpg in. No second list to maintain.   */
+function fillPortraits(){
+  [].forEach.call(document.querySelectorAll("#p-people .ph"),function(ph){
+    if(ph.querySelector("img"))return;
+    var card=ph.parentNode;
+    var h=card.querySelector("h3")||(card.nextElementSibling&&card.nextElementSibling.querySelector("h3"));
+    if(!h)return;
+    var slug=h.textContent.trim().toLowerCase()
+      .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+    var img=document.createElement("img");
+    img.alt=h.textContent.trim();
+    img.addEventListener("error",function(){img.remove();});
+    img.src="people/"+slug+".jpg";
+    ph.appendChild(img);
+  });
+}
+
 /* Event posters. The filename is derived from the event itself, so dropping a
    file into posters/ is all it takes: 2024-10-30-grad-panel.png              */
 function posterSlug(e){
@@ -1975,6 +2064,8 @@ monthList();
 renderArchive("all");
 calendarKey();
 renderPosters();
+fillPortraits();
+loadPhotos();
 (function(){
   /* year range must include entries whose day is not known yet */
   var yrs=EVENTS.map(function(e){return parts(e.d).y;}).filter(function(y){return y>0;});
