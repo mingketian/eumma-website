@@ -1,0 +1,1960 @@
+<title>EUMMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fredoka:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Zilla+Slab:wght@400&display=swap">
+
+<style>
+:root{
+  color-scheme: light;
+
+  /* ---- ground: neutrals biased toward the accent, not inherited grey ---- */
+  --white:#FFFFFF;
+  --paper:#FBF8F8;
+  --band:#F5EFEF;
+  --ink:#141216;
+  --ink-2:#55505A;
+  --ink-3:#6E6875;
+  --rule:#E8DFDF;
+  --rule-2:#F3ECEC;
+
+  /* ---- brand ---- */
+  --red:#9E1B25;
+  --red-lit:#C8202E;
+  --red-deep:#6F0F16;
+  --red-wash:#FCF1F1;
+  --red-line:#EBD2D3;
+
+  /* ---- subject palette ----------------------------------------------
+     The four letters of MATH in the logo already carry four colors, so
+     those four ARE the four pillars. Deepened from the poster's brights
+     into academic tones that hold next to the crimson and pass contrast
+     on white. Two further hues cover what is not a pillar.
+     --h fill / bright · --t small text · --w wash                      */
+  --h-compete:#D0651F; --t-compete:#A8481A; --w-compete:#FCF1E9;  /* M */
+  --h-connect:#C08C0C; --t-connect:#8A6300; --w-connect:#FBF4E2;  /* A */
+  --h-ai:#15889A;      --t-ai:#0F6E7C;      --w-ai:#E9F5F7;       /* T */
+  --h-research:#7E3576;--t-research:#63285C;--w-research:#F7EEF6;  /* H */
+  --h-study:#237567;   --t-study:#1B5E54;   --w-study:#EAF4F1;
+  --h-social:#5480A6;  --t-social:#41688A;  --w-social:#EDF2F7;
+
+  /* ---- type ---- */
+  --display:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  --brand:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --slab:"Zilla Slab",Georgia,serif;
+  --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  --math:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+
+  /* ---- rhythm ---- */
+  --pad:clamp(1.15rem,4vw,3.25rem);
+  --maxw:1200px;
+  --sec:clamp(3rem,6.5vw,5rem);
+}
+
+[data-h="compete"] {--h:var(--h-compete); --t:var(--t-compete); --w:var(--w-compete)}
+[data-h="connect"] {--h:var(--h-connect); --t:var(--t-connect); --w:var(--w-connect)}
+[data-h="ai"]      {--h:var(--h-ai);      --t:var(--t-ai);      --w:var(--w-ai)}
+[data-h="research"]{--h:var(--h-research);--t:var(--t-research);--w:var(--w-research)}
+[data-h="study"]   {--h:var(--h-study);   --t:var(--t-study);   --w:var(--w-study)}
+[data-h="social"]  {--h:var(--h-social);  --t:var(--t-social);  --w:var(--w-social)}
+[data-h="brand"]   {--h:var(--red);       --t:var(--red);       --w:var(--red-wash)}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--white);color:var(--ink);
+  font-family:var(--body);font-size:1rem;line-height:1.62;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+h1,h2,h3,h4,h5{margin:0;font-family:var(--display);font-weight:600;line-height:1.2;letter-spacing:-.008em;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+ul,ol{margin:0;padding:0;list-style:none}
+dl,dd{margin:0}
+canvas{display:block}
+:focus-visible{outline:2px solid var(--red-lit);outline-offset:3px;border-radius:2px}
+::selection{background:var(--red-wash);color:var(--red-deep)}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:100;background:var(--ink);color:#fff;
+  padding:.6rem 1rem;font-size:.85rem;text-decoration:none;border-radius:0 0 2px 0;
+}
+.skip:focus{left:0}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.math{font-family:var(--math);font-style:italic}
+
+/* one label style, used everywhere a label is needed */
+.lab{
+  font-family:var(--mono);font-size:.6875rem;font-weight:500;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--red);
+  display:flex;align-items:center;gap:.7rem;
+}
+.lab::after{content:"";flex:1;height:1px;background:var(--red-line);max-width:96px}
+.lab.bare::after{display:none}
+
+/* ---- scholarly register: §, displayed statements, theorem environments ---- */
+.lab .no{color:var(--ink-3);font-weight:400;letter-spacing:.08em;font-variant-numeric:tabular-nums}
+
+.stmt{
+  font-family:var(--serif);font-size:clamp(1.12rem,1.9vw,1.38rem);line-height:1.5;font-weight:400;
+  color:var(--ink);border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);
+  padding:1.2rem 0 1.3rem;margin:1.15rem 0 1.35rem;max-width:34em;
+}
+.stmt .sc{
+  display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--red);margin-bottom:.7rem;font-weight:600;
+}
+
+/* the line SUMO puts on everything: what you are assumed to know */
+.assumes{
+  display:grid;grid-template-columns:6.1rem minmax(0,1fr);gap:.45rem .9rem;
+  margin-top:.9rem;padding-top:.85rem;border-top:1px solid var(--rule-2);
+}
+.assumes b{
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--t,var(--red));font-weight:600;padding-top:.18rem;
+}
+.assumes span{font-size:.82rem;line-height:1.5;color:var(--ink)}
+.assumes code{font-family:var(--mono);color:var(--ink);font-weight:500}
+
+/* course numbers, set like course numbers */
+code{
+  font-family:var(--mono);font-size:.86em;font-weight:500;color:var(--ink);
+  background:var(--paper);border:1px solid var(--rule-2);border-radius:2px;
+  padding:.06em .3em;white-space:nowrap;
+}
+.assumes code,table.glance code{background:transparent;border:0;padding:0}
+table.glance code{color:var(--t,var(--ink));font-weight:600}
+.faq code,.who code{background:var(--w,var(--red-wash));border-color:transparent}
+
+/* provenance: where a number on this page came from */
+.prov{
+  font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--ink-2);
+  margin-top:.9rem;padding-left:.9rem;border-left:2px solid var(--rule);max-width:72ch;
+}
+
+/* the four pillar colors, in the order they sit in MATH: a recurring device */
+.spectrum{display:flex;height:2px;width:100%}
+.spectrum i{flex:1}
+.spectrum i:nth-child(1){background:var(--h-compete)}
+.spectrum i:nth-child(2){background:var(--h-connect)}
+.spectrum i:nth-child(3){background:var(--h-ai)}
+.spectrum i:nth-child(4){background:var(--h-research)}
+.spectrum.thin{height:2px}
+.spectrum.short{width:88px;flex:none}
+
+/* one hue-carrying tag, used for every categorised thing on the site */
+.cat{
+  display:inline-flex;align-items:center;gap:.4rem;font-family:var(--mono);
+  font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;
+  color:var(--t,var(--ink-3));background:var(--w,transparent);
+  border:1px solid var(--rule);
+  border-color:color-mix(in srgb,var(--h,var(--rule)) 30%,transparent);
+  padding:.16rem .45rem;border-radius:2px;white-space:nowrap;
+}
+.cat i{width:6px;height:6px;background:var(--h,var(--ink-3));flex:none;border-radius:1px}
+
+/* graph paper */
+.paperbg{
+  background-image:
+    linear-gradient(var(--rule-2) 1px,transparent 1px),
+    linear-gradient(90deg,var(--rule-2) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+
+/* ============================ prototype bar ============================ */
+.proto{background:var(--paper);color:var(--ink-3);font-family:var(--mono);font-size:.665rem;letter-spacing:.05em;border-bottom:1px solid var(--rule)}
+.proto .wrap{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding-block:.42rem}
+.proto b{color:var(--red);font-weight:600;letter-spacing:.14em}
+.proto button{background:transparent;border:1px solid var(--rule);color:var(--ink-3);font:inherit;padding:.1rem .55rem;border-radius:2px;cursor:pointer;flex:none}
+.proto button:hover{border-color:var(--ink-3);color:var(--ink-2)}
+
+/* ============================ header ============================ */
+header.site{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.92);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid var(--rule)}
+header.site .wrap{display:flex;align-items:center;gap:1.6rem;padding-block:.75rem}
+.brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;margin-right:auto}
+.brand svg{width:26px;height:26px;flex:none;color:var(--ink)}
+.brand .name{font-family:var(--slab);font-weight:400;letter-spacing:.24em;font-size:.9rem;color:var(--ink)}
+nav.main{display:flex;gap:1.5rem}
+nav.main a{
+  text-decoration:none;font-size:.83rem;font-weight:500;color:var(--ink-2);
+  padding-block:.32rem;border-bottom:1.5px solid transparent;white-space:nowrap;
+  transition:color .14s ease,border-color .14s ease;
+}
+nav.main a:hover{color:var(--ink)}
+nav.main a.on{color:var(--red);border-bottom-color:var(--red)}
+.term-now{font-family:var(--mono);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);border-left:1px solid var(--rule);padding-left:1.1rem;white-space:nowrap}
+
+.btn{
+  display:inline-flex;align-items:center;gap:.45rem;font-family:var(--body);
+  font-weight:600;font-size:.84rem;text-decoration:none;padding:.58rem 1.1rem;
+  border:1.5px solid var(--red);background:var(--red);color:#fff;border-radius:2px;
+  transition:background .14s ease,border-color .14s ease,color .14s ease;cursor:pointer;white-space:nowrap;
+}
+.btn:hover{background:var(--red-deep);border-color:var(--red-deep)}
+.btn.ghost{background:transparent;color:var(--red)}
+.btn.ghost:hover{background:var(--red-wash);color:var(--red-deep);border-color:var(--red-deep)}
+.btn.quiet{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.quiet:hover{background:var(--paper);border-color:var(--ink-3);color:var(--ink)}
+#burger{display:none;background:none;border:1px solid var(--rule);border-radius:2px;padding:.32rem .5rem;cursor:pointer;color:var(--ink);font-size:.9rem;line-height:1}
+@media(max-width:1040px){.term-now{display:none}}
+@media(max-width:940px){
+  nav.main{position:absolute;top:100%;left:0;right:0;background:#fff;border-bottom:1px solid var(--rule);flex-direction:column;gap:0;padding:.4rem var(--pad) 1rem}
+  nav.main[hidden]{display:none}
+  nav.main a{padding-block:.72rem;border-bottom:1px solid var(--rule-2);font-size:.95rem}
+  nav.main a.on{border-bottom-color:var(--rule-2)}
+  #burger{display:block}
+  header.site > .wrap > .btn{display:none}
+}
+
+/* ============================ page shell ============================ */
+.page[hidden]{display:none}
+section.blk{border-bottom:1px solid var(--rule)}
+section.blk > .wrap{padding-block:var(--sec)}
+section.tint{background:var(--paper)}
+.sechead{max-width:60ch;margin-bottom:clamp(1.75rem,3.5vw,2.75rem)}
+.sechead h2{font-size:clamp(1.35rem,2.3vw,1.8rem);letter-spacing:-.008em;margin-block:.7rem .55rem}
+.sechead p{color:var(--ink-2);font-size:1rem}
+
+.pagehead{border-bottom:1px solid var(--rule);background:var(--paper);position:relative;overflow:hidden}
+.pagehead .wrap{padding-block:clamp(2.35rem,5.2vw,3.6rem);position:relative;z-index:1}
+.pagehead h1{font-size:clamp(1.75rem,3.3vw,2.45rem);letter-spacing:-.012em;margin-block:.7rem .6rem}
+.pagehead p{color:var(--ink-2);max-width:64ch}
+.crumb{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.645rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);padding-bottom:.9rem;margin-bottom:1.1rem;border-bottom:1px solid var(--rule);
+}
+.crumb .here{color:var(--t,var(--red));font-weight:600}
+.crumb .stat{color:var(--ink-2);font-variant-numeric:tabular-nums;letter-spacing:.08em}
+.headrule{position:absolute;top:0;left:0;right:0;z-index:2}
+.headrule.solid{height:2px;background:var(--h,var(--red))}
+
+/* ============================ HERO ============================ */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--rule);isolation:isolate;background:var(--white)}
+.hero .paperlayer{position:absolute;inset:0;z-index:0;opacity:.6}
+.hero .field{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero .field canvas{position:absolute;inset:0;width:100%;height:100%}
+@media(min-width:941px){
+  .hero .field{
+    -webkit-mask-image:radial-gradient(ellipse 46% 52% at 50% 46%,rgba(0,0,0,0) 28%,rgba(0,0,0,.10) 48%,rgba(0,0,0,.55) 68%,#000 92%);
+            mask-image:radial-gradient(ellipse 46% 52% at 50% 46%,rgba(0,0,0,0) 28%,rgba(0,0,0,.10) 48%,rgba(0,0,0,.55) 68%,#000 92%);
+  }
+}
+@media(max-width:940px){
+  .hero .field{
+    -webkit-mask-image:radial-gradient(ellipse 80% 40% at 50% 48%,rgba(0,0,0,0) 30%,rgba(0,0,0,.12) 55%,rgba(0,0,0,.6) 78%,#000 96%);
+            mask-image:radial-gradient(ellipse 80% 40% at 50% 48%,rgba(0,0,0,0) 30%,rgba(0,0,0,.12) 55%,rgba(0,0,0,.6) 78%,#000 96%);
+  }
+}
+.hero .wrap{
+  position:relative;z-index:2;
+  padding-block:clamp(3.25rem,7.5vw,5.5rem);
+  min-height:clamp(440px,62vh,600px);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+}
+.hero .inner{max-width:46rem;text-align:center}
+.hero .inner .lab{justify-content:center}
+.hero .inner .lab::after{display:none}
+
+.wordmark{font-family:var(--brand);font-weight:700;letter-spacing:-.028em;line-height:.92;margin-top:1.1rem}
+.wordmark .big{display:block;font-size:clamp(3.2rem,9vw,6rem)}
+.wordmark .sub{display:block;font-size:clamp(.98rem,2.2vw,1.58rem);font-weight:600;margin-top:.6rem;letter-spacing:-.012em;color:var(--ink)}
+.wordmark .c1{color:var(--h-compete)}.wordmark .c2{color:var(--h-connect)}
+.wordmark .c3{color:var(--h-ai)}.wordmark .c4{color:var(--h-research)}
+
+.pillarline{
+  margin-top:1.4rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:clamp(.7rem,1.35vw,.8rem);font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--red);
+}
+.pillarline span{padding-right:.9rem;margin-right:.9rem;border-right:1px solid var(--red-line);line-height:1.2}
+.pillarline span:last-child{border-right:0;padding-right:0;margin-right:0}
+
+.hero .lede{margin:1.5rem auto 0;font-size:clamp(.97rem,1.3vw,1.06rem);color:var(--ink-2);max-width:84ch;line-height:1.66}
+.lb{display:none}
+@media(min-width:900px){.lb{display:inline}}
+.hero .cta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.9rem;justify-content:center}
+.fieldtag{
+  position:absolute;z-index:2;right:var(--pad);bottom:1.1rem;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:var(--ink-3);
+}
+@media(max-width:940px){.fieldtag{display:none}}
+
+/* ============================ who ============================ */
+
+a.src{font-family:var(--mono);font-size:.76rem;color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule);transition:color .14s ease,border-color .14s ease}
+a.src:hover{color:var(--red);border-bottom-color:var(--red)}
+
+/* ============================ intro ============================ */
+.intro{max-width:68ch}
+.intro p{color:var(--ink-2)}
+.intro p.lead{
+  font-family:var(--serif);font-size:clamp(1.05rem,1.55vw,1.22rem);line-height:1.62;
+  color:var(--ink);margin-top:1.25rem;
+}
+.intro .cta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.75rem}
+
+/* ============================ pillars ============================ */
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border-block:1px solid var(--rule)}
+@media(max-width:920px){.pillars{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.pillars{grid-template-columns:1fr}}
+.pillar{background:var(--white);padding:0 0 1.7rem;justify-content:flex-start;display:flex;flex-direction:column;transition:background .18s ease}
+.pillar:hover{background:var(--w)}
+.pillar .rule{height:2px;background:var(--h)}
+.pillar .mk{
+  display:flex;align-items:center;gap:.7rem;padding:1.15rem 1.35rem .55rem;
+}
+.pillar .k{font-family:var(--mono);font-size:.645rem;letter-spacing:.15em;text-transform:uppercase;font-weight:600;color:var(--t)}
+.pillar .ico{width:28px;height:28px;color:var(--h);margin:0 1.35rem .7rem;opacity:.9}
+.pillar h3{font-size:1.06rem;font-weight:600;letter-spacing:-.008em;padding-inline:1.35rem}
+.pillar p{font-size:.875rem;color:var(--ink-2);padding-inline:1.35rem;margin-top:.4rem}
+.pillar .more{
+  margin:1.1rem 1.35rem 0;padding-top:.8rem;border-top:1px solid var(--rule-2);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;color:var(--t);
+  text-decoration:none;display:block;transition:opacity .14s ease;
+}
+.pillar .more:hover{opacity:.65}
+.pillar ul{margin:.9rem 1.35rem 0;padding-top:.7rem;border-top:1px solid var(--rule-2);display:flex;flex-direction:column;gap:.3rem;font-size:.785rem;color:var(--ink-3)}
+.pillar li{padding-left:.85rem;position:relative}
+.pillar li::before{content:"";position:absolute;left:0;top:.58em;width:5px;height:1px;background:var(--h);opacity:.55}
+
+/* ============================ at-a-glance table ============================ */
+.glancewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--white);margin-bottom:2.25rem}
+table.glance{border-collapse:collapse;width:100%;min-width:640px;font-size:.84rem}
+table.glance.tight{min-width:520px}
+table.glance.lean{min-width:440px}
+table.glance.lean th:nth-child(1),table.glance.lean td:nth-child(1){width:52%}
+table.glance.lean th:nth-child(2),table.glance.lean td:nth-child(2){width:30%}
+table.glance.lean th:nth-child(3),table.glance.lean td:nth-child(3){width:18%}
+table.glance code{font-family:var(--mono);font-size:.82em;color:var(--ink);font-weight:500;white-space:nowrap}
+table.glance caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:.8rem .9rem .1rem}
+table.glance th{
+  text-align:left;font-family:var(--mono);font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;padding:.7rem .9rem;border-bottom:1px solid var(--rule);background:var(--paper);white-space:nowrap;
+}
+table.glance td{padding:.8rem .9rem;border-bottom:1px solid var(--rule-2);vertical-align:top;color:var(--ink-2)}
+table.glance tr:last-child td{border-bottom:0}
+table.glance tbody tr:hover{background:var(--w,var(--paper))}
+table.glance .nm{color:var(--ink);font-weight:600;font-family:var(--display);font-size:.92rem;white-space:nowrap}
+table.glance .nm .cat{margin-left:.5rem;vertical-align:.05em}
+table.glance .nm{line-height:1.3}
+table.glance .nm .cat{display:inline-flex}
+table.glance .yes{color:var(--t-study);font-weight:600}
+table.glance .mid{color:var(--t-connect);font-weight:600}
+
+/* ============================ calendar ============================ */
+.calwrap{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(1.5rem,3.5vw,2.75rem);align-items:start}
+@media(max-width:940px){.calwrap{grid-template-columns:1fr}}
+.cal{border:1px solid var(--rule);background:var(--white)}
+.calbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem .85rem;border-bottom:1px solid var(--rule)}
+.calbar h3{font-size:.97rem;font-weight:600;font-variant-numeric:tabular-nums}
+.calnav{display:flex;gap:.3rem}
+.calnav button{
+  width:29px;height:29px;border:1px solid var(--rule);background:var(--white);border-radius:2px;
+  cursor:pointer;color:var(--ink-2);font-size:.85rem;line-height:1;display:grid;place-items:center;
+  transition:border-color .14s ease,color .14s ease;
+}
+.calnav button:hover{border-color:var(--red);color:var(--red)}
+.calnav .txt{width:auto;padding-inline:.6rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase}
+.caldow{display:grid;grid-template-columns:repeat(7,1fr);background:var(--paper);border-bottom:1px solid var(--rule)}
+.caldow span{padding:.4rem 0;text-align:center;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--rule-2)}
+.cell{background:var(--white);min-height:78px;padding:.35rem .38rem;display:flex;flex-direction:column;gap:.22rem;text-align:left;border:0;font:inherit;color:inherit;cursor:default}
+.cell.out{background:var(--paper)}
+.cell .dnum{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);font-variant-numeric:tabular-nums;line-height:1.4}
+.cell.out .dnum{opacity:.45}
+.cell.today .dnum{background:var(--ink);color:#fff;border-radius:50%;width:1.35rem;height:1.35rem;display:grid;place-items:center;font-weight:600}
+.cell.has{cursor:pointer}
+.cell.has:hover{background:var(--red-wash)}
+.cell.sel{box-shadow:inset 0 0 0 1.5px var(--red)}
+.pip{font-family:var(--mono);font-size:.575rem;line-height:1.35;padding:.14rem .3rem;border-radius:2px;background:var(--h,var(--red));color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pip.draft{background:var(--w,var(--white));color:var(--t,var(--red));border:1px dashed var(--h,var(--red-line));padding-block:calc(.14rem - 1px)}
+@media(max-width:620px){.cell{min-height:54px}.pip{font-size:0;padding:.22rem}.pip::before{content:"";display:block;height:3px}}
+
+.calside h3{font-size:1rem;font-weight:600}
+.calside > p{font-size:.85rem;color:var(--ink-2);margin-top:.3rem}
+.callist{display:flex;flex-direction:column;margin-top:1.1rem;border-top:1px solid var(--ink)}
+.callist li{padding-block:.9rem;border-bottom:1px solid var(--rule-2);display:grid;grid-template-columns:4.4rem 1fr;gap:.9rem}
+.callist li{border-left:2px solid var(--h,var(--rule));padding-left:.85rem}
+.callist .dt{font-family:var(--mono);font-size:.7rem;color:var(--t,var(--red));font-weight:500;line-height:1.5;font-variant-numeric:tabular-nums}
+.callist strong{font-family:var(--display);font-weight:600;font-size:.94rem;display:block;line-height:1.3}
+.callist p{font-size:.81rem;color:var(--ink-2);margin-top:.3rem}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1.1rem;margin-top:1.1rem;font-family:var(--mono);font-size:.63rem;color:var(--ink-3)}
+.legend i{display:inline-block;width:9px;height:9px;margin-right:.4rem;vertical-align:-1px}
+.legend .c{background:var(--ink-3)}
+.legend .d{border:1px dashed var(--ink-3)}
+
+/* ============================ rows ============================ */
+.rows{border-top:1px solid var(--ink)}
+.row{display:grid;grid-template-columns:1fr auto;gap:.5rem 1.5rem;padding:1.2rem 0 1.2rem 1.1rem;border-bottom:1px solid var(--rule-2);border-left:2px solid var(--h,transparent);transition:background .16s ease}
+.row:hover{background:var(--w,transparent)}
+.row.plain{padding-left:0;border-left:0}
+.row h3{font-size:1rem;font-weight:600}
+.row .meta{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);margin-top:.3rem;display:flex;flex-wrap:wrap;gap:.25rem .9rem}
+.row p{font-size:.885rem;color:var(--ink-2);margin-top:.45rem;max-width:68ch}
+.row .right{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;text-align:right}
+@media(max-width:640px){.row{grid-template-columns:1fr}.row .right{align-items:flex-start;text-align:left;flex-direction:row;flex-wrap:wrap}}
+
+.chip{font-family:var(--mono);font-size:.65rem;letter-spacing:.05em;padding:.2rem .5rem;border-radius:2px;white-space:nowrap;border:1px solid var(--rule);color:var(--ink-3)}
+.chip.go{color:var(--t-study);border-color:#C4E0D9;background:var(--w-study)}
+.chip.hot{color:#fff;background:var(--red);border-color:var(--red)}
+.chip.warn{color:var(--red);border-color:var(--red-line);background:var(--red-wash)}
+
+/* ============================ needs-input notes ============================ */
+.tbd{
+  border-left:2px solid var(--red-line);padding:.1rem 0 .1rem 1.1rem;
+  color:var(--ink-2);font-size:.845rem;line-height:1.6;max-width:74ch;
+}
+.tbd strong{
+  display:block;font-family:var(--mono);font-size:.615rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--red);margin-bottom:.3rem;font-weight:600;
+}
+
+/* ============================ events archive ============================ */
+.filters{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:2.25rem}
+.filters button{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:.42rem .8rem;border:1px solid var(--rule);background:var(--white);border-radius:2px;
+  cursor:pointer;color:var(--ink-2);transition:border-color .14s ease,color .14s ease,background .14s ease;
+}
+.filters button:hover{border-color:var(--red);color:var(--red)}
+.filters button.on{background:var(--red);border-color:var(--red);color:#fff}
+.term{margin-bottom:2.75rem}
+.term > h3{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--red);
+  font-weight:600;padding-bottom:.55rem;border-bottom:1.5px solid var(--red);
+  display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+}
+.term > h3 em{font-style:normal;color:var(--ink-3);font-weight:400;letter-spacing:.1em}
+.ev{display:grid;grid-template-columns:8rem 1fr auto;gap:.35rem 1.5rem;padding-block:1.1rem;border-bottom:1px solid var(--rule-2);align-items:start}
+.ev .when{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);line-height:1.5;padding-top:.16rem;font-variant-numeric:tabular-nums}
+.ev h4{font-size:.98rem;font-weight:600;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;letter-spacing:-.006em}
+.ev p{font-size:.865rem;color:var(--ink-2);margin-top:.25rem;max-width:66ch}
+.room{font-family:var(--mono);font-size:.64rem;color:var(--red);border:1px solid var(--red-line);background:var(--red-wash);padding:.1rem .38rem;border-radius:2px;white-space:nowrap;font-weight:500}
+.tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule);padding:.14rem .4rem;border-radius:2px;white-space:nowrap}
+@media(max-width:700px){.ev{grid-template-columns:1fr;gap:.28rem}.ev .when{order:-1}}
+
+/* ============================ tracks ============================ */
+.tracks{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+@media(max-width:860px){.tracks{grid-template-columns:1fr}}
+.track{border:1px solid var(--rule);background:var(--white);display:flex;flex-direction:column;transition:border-color .16s ease}
+.track:hover{border-color:var(--ink-3);border-color:color-mix(in srgb,var(--h,var(--ink-3)) 55%,transparent)}
+.track .rule{height:2px;background:var(--h,var(--red));margin:-1px -1px 0}
+.track .top{padding:1.3rem 1.4rem 1.1rem;border-bottom:1px solid var(--rule-2)}
+.track .cadence{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t,var(--red));display:block;margin-bottom:.45rem}
+.track .steps li::before{color:var(--t,var(--red));background:var(--w,var(--red-wash));border-color:var(--rule);border-color:color-mix(in srgb,var(--h,var(--red)) 34%,transparent)}
+.track h3{font-size:1.12rem;font-weight:600;letter-spacing:-.006em}
+.track .sub{font-size:.83rem;color:var(--ink-3);margin-top:.3rem}
+.track .body{padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:1rem;flex:1}
+.track .body > p{max-width:64ch}
+.track dl,.track .assumes{max-width:52rem}
+.track .body > p{font-size:.885rem;color:var(--ink-2)}
+.track dl{display:grid;grid-template-columns:6.1rem 1fr;gap:.45rem .9rem;font-size:.82rem;padding-top:.9rem;border-top:1px solid var(--rule-2)}
+.track dt{font-family:var(--mono);font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);padding-top:.18rem}
+.track dd{color:var(--ink)}
+.track .foot{padding:.85rem 1.4rem;border-top:1px solid var(--rule-2);background:var(--paper);display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;justify-content:space-between}
+
+/* ============================ people ============================ */
+.people{display:flex;flex-direction:column;border-top:1px solid var(--ink);margin-inline:-1.1rem}
+.person{
+  display:grid;grid-template-columns:118px minmax(0,1fr);gap:1.6rem;align-items:start;
+  padding:1.45rem 1.1rem;border-bottom:1px solid var(--rule);
+}
+.person .ph{
+  width:118px;aspect-ratio:1/1;background:var(--paper);border:1px solid var(--rule);
+  display:grid;place-items:center;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.14em;color:var(--ink-3);opacity:.6;
+}
+.person .info{padding-top:.1rem}
+.person h3{font-size:1.06rem;font-weight:600}
+.person .role{
+  display:block;font-family:var(--mono);font-size:.9rem;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--red);margin-top:.45rem;line-height:1.35;
+}
+.person .mail{
+  display:inline-block;font-family:var(--mono);font-size:.78rem;color:var(--ink-2);
+  text-decoration:none;border-bottom:1px solid var(--rule);margin-top:.55rem;
+  transition:color .14s ease,border-color .14s ease;
+}
+.person .mail:hover{color:var(--red);border-bottom-color:var(--red)}
+.person p{font-size:.885rem;color:var(--ink-2);margin-top:.7rem;max-width:64ch}
+.person.open{background:var(--red-wash);border-bottom-color:var(--red-line)}
+.person.open .ph{background:var(--white);border-color:var(--red-line);color:var(--red);opacity:.75}
+@media(max-width:560px){
+  .person{grid-template-columns:84px minmax(0,1fr);gap:1.1rem;padding-block:1.2rem}
+  .people{margin-inline:-.7rem}
+  .person{padding-inline:.7rem}
+  .person .ph{width:84px}
+}
+
+.contactline{margin-top:1.75rem;font-size:.9rem;color:var(--ink-2)}
+.contactline a{color:var(--red);text-decoration:none;border-bottom:1px solid var(--red-line)}
+.contactline a:hover{border-bottom-color:var(--red)}
+
+/* ============================ join ============================ */
+.channels{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.channels.three{grid-template-columns:repeat(3,1fr)}
+@media(max-width:920px){.channels,.channels.three{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.channels,.channels.three{grid-template-columns:1fr}}
+.refhead{font-size:clamp(1.15rem,1.9vw,1.42rem);letter-spacing:-.008em;margin-block:.7rem .55rem}
+.row h4{font-size:1rem;font-weight:600}
+.fac{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-3);margin-top:.5rem;max-width:74ch}
+.channels h4{font-size:1rem;font-weight:600}
+.channels > div{background:var(--white);padding:1.45rem 1.35rem;display:flex;flex-direction:column;gap:.5rem;border-top:2px solid transparent}
+.channels > div.lead{border-top-color:var(--red);background:var(--red-wash)}
+.channels > div.lead .k{color:var(--red);font-weight:600}
+.channels .ico{width:24px;height:24px;color:var(--ink-3);margin-bottom:.35rem}
+.channels > div.lead .ico{color:var(--red)}
+.channels .k{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.channels h3{font-size:1rem;font-weight:600}
+.channels p{font-size:.85rem;color:var(--ink-2);flex:1}
+.channels a.go{font-family:var(--mono);font-size:.72rem;color:var(--red);text-decoration:none;border-bottom:1px solid currentColor;align-self:flex-start;transition:color .14s ease}
+.channels a.go:hover{color:var(--red-deep)}
+.channels .pending{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);border-bottom:1px dashed var(--rule);align-self:flex-start}
+.faq{display:grid;grid-template-columns:repeat(2,1fr);gap:1.6rem 3rem}
+@media(max-width:760px){.faq{grid-template-columns:1fr;gap:1.3rem}}
+.faq h3{font-size:.95rem;font-weight:600;margin-bottom:.3rem}
+.faq p{font-size:.865rem;color:var(--ink-2)}
+
+/* ============================ event poster gallery ============================ */
+.postergrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.5rem;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
+.postergrid:empty{display:none}
+.postergrid figure{margin:0;display:flex;flex-direction:column}
+.postergrid figcaption{margin-bottom:.6rem}
+.postergrid .t{display:block;font-family:var(--display);font-weight:600;font-size:.95rem;line-height:1.3;color:var(--ink)}
+.postergrid .d{
+  display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--t,var(--red));margin-top:.25rem;font-variant-numeric:tabular-nums;
+}
+.postergrid img{display:block;width:100%;height:auto;border:1px solid var(--rule);background:var(--paper)}
+
+/* ============================ join QR codes ============================ */
+.qrs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,240px));gap:1.25rem;margin-top:1.75rem}
+.qr{margin:0;border:1px solid var(--rule);background:var(--white);padding:.9rem}
+.qr img{display:block;width:100%;height:auto;background:var(--paper)}
+.qr figcaption{
+  margin-top:.75rem;padding-top:.7rem;border-top:1px solid var(--rule-2);
+  font-size:.8rem;color:var(--ink-2);line-height:1.5;
+}
+.qr figcaption .k{
+  display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:.25rem;
+}
+
+/* ============================ poster ============================ */
+.poster{margin:0;border:1px solid var(--rule);background:var(--paper);padding:clamp(.75rem,2vw,1.5rem)}
+.poster img{display:block;width:100%;height:auto;border:1px solid var(--rule);background:var(--white)}
+.poster figcaption{
+  display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;justify-content:space-between;
+  margin-top:.85rem;padding-top:.7rem;border-top:1px solid var(--rule);
+  font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
+}
+
+/* ============================ cta strip ============================ */
+.strip{background:var(--red);color:#fff}
+.strip .wrap{padding-block:2.6rem;display:flex;flex-wrap:wrap;gap:1.25rem 2rem;align-items:center;justify-content:space-between}
+.strip h2{font-size:clamp(1.25rem,2.1vw,1.6rem);color:#fff;letter-spacing:-.008em}
+.strip p{color:#F4D3D5;font-size:.94rem;margin-top:.35rem;max-width:46ch}
+.strip .btn{background:#fff;color:var(--red);border-color:#fff}
+.strip .btn:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ============================ footer ============================ */
+footer.site{background:var(--ink);color:#A9A3AE}
+footer.site .wrap{padding-block:3rem 1.5rem;display:grid;grid-template-columns:minmax(0,1.5fr) repeat(2,minmax(0,1fr));gap:2.5rem}
+@media(max-width:760px){footer.site .wrap{grid-template-columns:1fr;gap:1.75rem}}
+footer.site .name{font-family:var(--slab);letter-spacing:.24em;font-size:.9rem;color:#fff}
+footer.site p{font-size:.78rem;line-height:1.68;margin-top:.75rem;max-width:44ch}
+footer.site h5{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#7C7684;margin:0 0 .75rem;font-weight:500}
+footer.site li{margin-bottom:.42rem;font-size:.83rem}
+footer.site a{color:#D2CDD6;text-decoration:none;border-bottom:1px solid transparent;transition:color .14s ease,border-color .14s ease}
+footer.site a:hover{color:#FF9AA2;border-bottom-color:#FF9AA2}
+.colophon{border-top:1px solid #2B2831;margin-top:.5rem}
+footer.site{position:relative}
+.colophon .wrap{padding-block:1.1rem 1.6rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between;grid-template-columns:none}
+.colophon span{font-family:var(--mono);font-size:.64rem;letter-spacing:.05em;color:#6F6976}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+@media print{
+  .proto,.skip,header.site,.strip,.calnav,.filters,.hero .field,.hero .paperlayer,.fieldtag{display:none!important}
+  .page[hidden]{display:block!important}
+  body{font-size:10.5pt;color:#000;background:#fff}
+  section.blk,.pagehead{border-color:#bbb;break-inside:avoid}
+  section.blk > .wrap,.pagehead .wrap,.hero .wrap{padding-block:1.1rem}
+  .hero .wrap{min-height:0}
+  a{text-decoration:none;color:#000}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-family:var(--mono);font-size:.72em;color:#555}
+  .pillar,.track,.person,.ev,.row,.faq > div{break-inside:avoid}
+  .tbd{border-left-color:#999}
+}
+</style>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="proto" id="protobar">
+  <div class="wrap">
+    <span><b>DRAFT</b> &nbsp;Prepared for EUMMA board review. Red-ruled notes mark items awaiting board input.</span>
+    <button type="button" id="protoclose">Hide</button>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#/" data-nav>
+      <svg viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="square">
+        <path d="M14 12 H86 M14 12 V88 M14 88 H86 M32 30 H86 M32 30 V52 M32 52 H68 M50 52 V70 M50 70 H86"></path>
+      </svg>
+      <span class="name">EUMMA</span>
+    </a>
+    <button id="burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+    <nav class="main" id="nav">
+      <a href="#/" data-nav data-r="/">Home</a>
+      <a href="#/events" data-nav data-r="/events">Events</a>
+      <a href="#/training" data-nav data-r="/training">Training</a>
+      <a href="#/people" data-nav data-r="/people">Team</a>
+      <a href="#/join" data-nav data-r="/join">Join Us</a>
+    </nav>
+    <span class="term-now" id="termNow"></span>
+    <a class="btn" href="#/join" data-nav>Join us</a>
+  </div>
+</header>
+
+<!-- ===================================== HOME ===================================== -->
+<main class="page" id="p-home" tabindex="-1">
+
+  <div class="hero">
+    <div class="paperlayer paperbg" aria-hidden="true"></div>
+    <div class="field" aria-hidden="true">
+      <canvas id="cLevels"></canvas>
+      <canvas id="cFlow"></canvas>
+    </div>
+    <span class="fieldtag mono" aria-hidden="true">−∇f</span>
+    <div class="wrap">
+      <div class="inner">
+        <p class="lab bare">Est. 2005 · Emory College · Atlanta</p>
+        <h1 class="wordmark">
+          <span class="big">EUMMA</span>
+          <span class="sub">(Emory Undergraduate <span class="c1">M</span><span class="c2">A</span><span class="c3">T</span><span class="c4">H</span>eMatics Association)</span>
+        </h1>
+        <p class="pillarline"><span>Research</span><span>Connect</span><span>Compete</span><span>Explore AI</span></p>
+        <p class="lede">Emory Undergraduate MatheMatics Association (EUMMA) is a student organization<br class="lb">
+          dedicated to building the undergraduate mathematics community at Emory through<br class="lb">
+          academic panels, study sessions, competition and AI training, and social events.</p>
+        <div class="cta">
+          <a class="btn" href="#/join" data-nav>Join EUMMA</a>
+          <a class="btn quiet" href="#/people" data-nav>Our Team</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="blk">
+    <div class="wrap">
+      <div class="intro">
+        <h2 class="lab bare">What is EUMMA?</h2>
+        <p class="lead">We host academic panels, study sessions, AI competition training, and game nights. All of our events are open to everyone: math majors and non-math majors, undergraduate and graduate. Register on The&nbsp;Hub, join the GroupMe or WeChat, and come to something.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tint">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Activities</p>
+        <h2>EUMMA Activities</h2>
+      </div>
+      <div class="pillars">
+        <div class="pillar" data-h="research">
+          <div class="rule"></div>
+          <div class="mk"><span class="k">Research</span></div>
+          <h3>Research and Career Opportunities</h3>
+          <p>We point students toward the Directed Reading Program, REUs, SIRE, and honors theses, and we keep a dated list of research and career openings that are easy to miss.</p>
+          <a class="more" href="#/training" data-nav>More information →</a>
+        </div>
+        <div class="pillar" data-h="connect">
+          <div class="rule"></div>
+          <div class="mk"><span class="k">Connect</span></div>
+          <h3>Panels and Networking</h3>
+          <p>We host panels with graduate students, faculty, and alumni a few times a semester, on applying to graduate school, choosing the major, and what people do after it. The rooms are small and the questions are yours.</p>
+          <a class="more" href="#/events" data-nav>More information →</a>
+        </div>
+        <div class="pillar" data-h="ai">
+          <div class="rule"></div>
+          <div class="mk"><span class="k">Explore AI</span></div>
+          <h3>Kaggle and Machine Learning</h3>
+          <p>New this year. We work one Kaggle competition per semester as a group, starting from an empty notebook, plus short workshops on the linear algebra and optimization underneath it. No prior coding is assumed.</p>
+          <a class="more" href="#/training" data-nav>More information →</a>
+        </div>
+        <div class="pillar" data-h="compete">
+          <div class="rule"></div>
+          <div class="mk"><span class="k">Compete</span></div>
+          <h3>Competitions</h3>
+          <p>We run four Kaggle and MCM training sessions across the year and field teams for the Mathematical Contest in Modeling in the spring. No competition experience is needed.</p>
+          <a class="more" href="#/training" data-nav>More information →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Calendar</p>
+        <h2>Upcoming Events</h2>
+      </div>
+      <div class="calwrap">
+        <div class="cal">
+          <div class="calbar">
+            <h3 id="calTitle"></h3>
+            <div class="calnav">
+              <button type="button" id="calPrev" aria-label="Previous month">‹</button>
+              <button type="button" id="calToday" class="txt">Today</button>
+              <button type="button" id="calNext" aria-label="Next month">›</button>
+            </div>
+          </div>
+          <div class="caldow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+          <div class="calgrid" id="calGrid"></div>
+        </div>
+        <div class="calside">
+          <h3 id="sideTitle">This Month</h3>
+          <p id="sideNote"></p>
+          <ul class="callist" id="sideList"></ul>
+          <div class="legend" id="calKey"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip">
+    <div class="wrap">
+      <h2>Come to an event and be our member.</h2>
+      <a class="btn" href="#/join" data-nav>Join EUMMA →</a>
+    </div>
+  </div>
+</main>
+
+<!-- ===================================== EVENTS ===================================== -->
+<main class="page" id="p-events" tabindex="-1" hidden>
+  <div class="pagehead">
+    <div class="headrule"><div class="spectrum"><i></i><i></i><i></i><i></i></div></div>
+    <div class="paperlayer paperbg" aria-hidden="true" style="position:absolute;inset:0;opacity:.7"></div>
+    <div class="wrap">
+      <div class="crumb"><span>EUMMA / <span class="here" style="--t:var(--red)">Events</span></span><span class="stat" id="archStat"></span></div>
+      <h1>Events</h1>
+      <p>A record of EUMMA events, newest first. All rooms are in the Mathematics and Science Center.</p>
+    </div>
+  </div>
+  <section class="blk">
+    <div class="wrap">
+      <div class="sechead" id="posterHead" hidden>
+        <p class="lab">Posters</p>
+        <h2>Event Posters</h2>
+        <p>The poster for each event we have run, newest first.</p>
+      </div>
+      <div class="postergrid" id="posterGrid"></div>
+
+      <div class="sechead">
+        <p class="lab">Archive</p>
+        <h2>Past Events</h2>
+      </div>
+      <div class="filters" id="filters">
+        <button type="button" data-f="all" class="on">All</button>
+        <button type="button" data-f="research">Research</button>
+        <button type="button" data-f="connect">Connect</button>
+        <button type="button" data-f="ai">Explore AI</button>
+        <button type="button" data-f="study">Study</button>
+        <button type="button" data-f="social">Social</button>
+        <button type="button" data-f="compete">Compete</button>
+      </div>
+      <div id="archive"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================================== TRAINING ===================================== -->
+<main class="page" id="p-training" tabindex="-1" hidden>
+  <div class="pagehead" data-h="compete">
+    <div class="headrule solid"></div>
+    <div class="paperlayer paperbg" aria-hidden="true" style="position:absolute;inset:0;opacity:.7"></div>
+    <div class="wrap">
+      <div class="crumb"><span>EUMMA / <span class="here">Training</span></span><span class="stat">3 run by EUMMA · 2 elsewhere</span></div>
+      <h1>Competitions and Training</h1>
+      <p>What EUMMA runs, and the programs we point people to. Each one says when it meets and what it assumes.</p>
+    </div>
+  </div>
+
+  <section class="blk">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Overview</p>
+        <h2>Activities at a Glance</h2>
+      </div>
+      <div class="glancewrap">
+        <table class="glance lean">
+          <caption>Five activities, and what each one assumes</caption>
+          <thead><tr><th>Activity</th><th>Prerequisites</th><th>Beginners</th></tr></thead>
+          <tbody>
+            <tr data-h="compete"><td class="nm">Kaggle / MCM Training<span class="cat" data-h="compete"><i></i>Compete</span></td><td>A laptop</td><td class="yes">Yes</td></tr>
+            <tr data-h="ai"><td class="nm">AI4S&amp;E Workshop<span class="cat" data-h="ai"><i></i>Explore AI</span></td><td>None</td><td class="yes">Yes</td></tr>
+            <tr data-h="study"><td class="nm">Finals Study Sessions<span class="cat" data-h="study"><i></i>Study</span></td><td>None</td><td class="yes">Yes</td></tr>
+            <tr data-h="compete"><td class="nm">MCM / ICM<span class="cat" data-h="compete"><i></i>Compete</span></td><td>Python or MATLAB</td><td class="mid">Team helps</td></tr>
+            <tr data-h="research"><td class="nm">DRP<span class="cat" data-h="research"><i></i>Research</span></td><td>MATH 250</td><td class="yes">Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sechead" style="margin-top:clamp(2.5rem,5vw,3.5rem)">
+        <p class="lab">Our programs</p>
+        <h2>What EUMMA Runs</h2>
+      </div>
+
+      <div class="tracks">
+
+        <article class="track" data-h="compete">
+          <div class="rule"></div>
+          <div class="top">
+            <span class="cadence">Four sessions a year · Fall and spring</span>
+            <h3>Kaggle / MCM Competition Training</h3>
+            <p class="sub">A numbered sequence, not a drop-in.</p>
+          </div>
+          <div class="body">
+            <p>We work one Kaggle competition as a group, from an empty notebook to a submitted prediction. Sessions III and IV add MCM preparation.</p>
+            <dl>
+              <dt>Sessions</dt><dd>I and II, Spring 2026 · III and IV, Fall 2026</dd>
+              <dt>Covers</dt><dd>Cross-validation, feature engineering, gradient boosting, the write-up</dd>
+              <dt>The math</dt><dd>Convex optimization, probability, <code class="mono">MATH 221</code></dd>
+            </dl>
+            <div class="assumes"><b>Assumes</b><span>A laptop. No prior coding.</span></div>
+          </div>
+          <div class="foot">
+            <span class="chip hot">Sessions III and IV this fall</span>
+            <a class="src" href="https://www.kaggle.com/competitions">kaggle.com/competitions ↗</a>
+          </div>
+        </article>
+
+        <article class="track" data-h="ai">
+          <div class="rule"></div>
+          <div class="top">
+            <span class="cadence">Once a year · January</span>
+            <h3>AI4S&amp;E Workshop</h3>
+            <p class="sub">AI for Science and Engineering.</p>
+          </div>
+          <div class="body">
+            <p>Where machine learning is actually used on scientific and engineering problems, and the mathematics it rests on. The entry point to the training sessions above.</p>
+            <dl>
+              <dt>Covers</dt><dd>SVD and PCA, gradients and convexity, non-convex objectives</dd>
+              <dt>Next</dt><dd>January 2027</dd>
+            </dl>
+            <div class="assumes"><b>Assumes</b><span>Nothing.</span></div>
+          </div>
+          <div class="foot">
+            <span class="chip go">Started January 2026</span>
+            <a class="src" href="#/events" data-nav>See it in the archive →</a>
+          </div>
+        </article>
+
+        <article class="track" data-h="study" style="grid-column:1/-1">
+          <div class="rule"></div>
+          <div class="top">
+            <span class="cadence">Each December · Open room</span>
+            <h3>Finals Study Sessions</h3>
+            <p class="sub">Drop in. There is no sign-up.</p>
+          </div>
+          <div class="body">
+            <p>A booked room during finals week, food, and upperclassmen who have already taken the course.</p>
+            <dl>
+              <dt>Covers</dt><dd><code class="mono">MATH 111</code> · <code class="mono">112</code> · <code class="mono">211</code> · <code class="mono">212</code> · <code class="mono">221</code> · <code class="mono">250</code></dd>
+              <dt>Where</dt><dd>Historically MSC W201 and E208</dd>
+            </dl>
+            <div class="assumes"><b>Assumes</b><span>Nothing. Bring your problem set.</span></div>
+          </div>
+          <div class="foot">
+            <span class="chip go">Every December</span>
+            <a class="src" href="#/events" data-nav>See past sessions →</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="sechead" style="margin-top:clamp(2.5rem,5vw,3.5rem)">
+        <p class="lab">Elsewhere</p>
+        <h2>Competitions and Department Programs</h2>
+      </div>
+
+      <div class="tracks">
+
+        <article class="track" data-h="compete">
+          <div class="rule"></div>
+          <div class="top">
+            <span class="cadence">96 hours · Spring · Teams of three</span>
+            <h3>Mathematical Contest in Modeling</h3>
+            <p class="sub">Run by COMAP. Our Sessions III and IV prepare for it.</p>
+          </div>
+          <div class="body">
+            <p>Teams of three, 96 hours, one open-ended problem, one paper. Our fall sessions are the preparation.</p>
+            <dl>
+              <dt>When</dt><dd>Spring contest; our preparation runs in the fall</dd>
+              <dt>Useful</dt><dd><code class="mono">MATH 212</code> · <code class="mono">345</code> · <code class="mono">361</code></dd>
+            </dl>
+            <div class="assumes"><b>Assumes</b><span>Some Python or MATLAB, and willingness to write a paper.</span></div>
+          </div>
+          <div class="foot">
+            <span class="chip go">Teams forming</span>
+            <a class="src" href="https://www.comap.com/undergraduate/contests/mcm/">comap.com ↗</a>
+          </div>
+        </article>
+
+        <article class="track" data-h="research">
+          <div class="rule"></div>
+          <div class="top">
+            <span class="cadence">One meeting a week · Each semester</span>
+            <h3>Directed Reading Program</h3>
+            <p class="sub">MATH 498R · one credit · S/U · run by the department.</p>
+          </div>
+          <div class="body">
+            <p>A graduate student reads one topic with you over a semester, meeting weekly and ending in a short talk.</p>
+            <dl>
+              <dt>Topics</dt><dd>Algebra · Analysis · Applied · Computational · Discrete · Geometry · Logic · Number theory, or your own</dd>
+              <dt>Run by</dt><dd>Graduate steering committee</dd>
+            </dl>
+            <div class="assumes"><b>Assumes</b><span>One proof-based course, usually <code>MATH 250</code>.</span></div>
+          </div>
+          <div class="foot">
+            <span class="chip">Applications each semester</span>
+            <a class="src" href="https://math.emory.edu/~drp/">math.emory.edu/~drp ↗</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="tbd" style="margin-top:1.75rem">
+        <strong>Needs board input</strong>
+        Each EUMMA program needs an owner, a meeting time, and a room booking. Confirm the MCM dates each September, and check whether the DRP is open for the coming semester.
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tint">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Advising</p>
+        <h2>Course Advising</h2>
+        <p>Ask a student who has already taken it. This is the service we get asked for most, and the one the course catalog cannot do for you.</p>
+      </div>
+
+      <div class="channels three">
+        <div>
+          <span class="k">What to take</span>
+          <h3>Course Selection</h3>
+          <p>Which courses in which order, what each one actually asks of you, and how the requirements fit together.</p>
+        </div>
+        <div>
+          <span class="k">Who teaches it</span>
+          <h3>Connecting with Professors</h3>
+          <p>Who teaches what, what they work on, and how to approach a professor whose area you want to get into.</p>
+        </div>
+        <div>
+          <span class="k">Where it leads</span>
+          <h3>Research Directions</h3>
+          <p>Which courses lead into which areas, and who to approach about undergraduate research.</p>
+        </div>
+      </div>
+
+      <p class="contactline">Ask at any event, or email <a href="mailto:mingke.tian@emory.edu">mingke.tian@emory.edu</a>.</p>
+
+      <div class="sechead" style="margin-top:clamp(2.5rem,5vw,3.5rem)">
+        <p class="lab">Who works on what</p>
+        <h3 class="refhead">Research Areas in the Department</h3>
+        <p>The five areas the Department of Mathematics groups its faculty under, and the courses that lead into each. If you want to do research in one of them, this is where to start reading.</p>
+      </div>
+
+      <div class="rows">
+        <div class="row" data-h="research">
+          <div>
+            <h4>Algebra and Number Theory</h4>
+            <div class="meta"><span>Leads in via <code class="mono">MATH 250</code> → <code class="mono">421</code> · <code class="mono">422</code></span></div>
+            <p>Structures of solution sets, algebraic geometry, and integers with an emphasis on primes.</p>
+            <p class="fac">Rohini Ramadas · Parimala Raman · Robert Silversmith · Suresh Venapally</p>
+          </div>
+          <div class="right"><a class="src" href="https://mathematics.emory.edu/research/algebra.html">Department page ↗</a></div>
+        </div>
+        <div class="row" data-h="research">
+          <div>
+            <h4>Analysis and Differential Geometry</h4>
+            <div class="meta"><span>Leads in via <code class="mono">MATH 250</code> → <code class="mono">411</code> · <code class="mono">412</code> · <code class="mono">318</code> · <code class="mono">344</code></span></div>
+            <p>Change, limits and continuity, extended to real and complex analysis, functional analysis, and the geometry of curves, surfaces and manifolds.</p>
+            <p class="fac">David Borthwick · Maja Taskovic · Yiran Wang · Shanshuang Yang</p>
+          </div>
+          <div class="right"><a class="src" href="https://mathematics.emory.edu/research/analysis.html">Department page ↗</a></div>
+        </div>
+        <div class="row" data-h="ai">
+          <div>
+            <h4>CODES &mdash; Computational and Data Enabled Science</h4>
+            <div class="meta"><span>Leads in via <code class="mono">MATH 221</code> → <code class="mono">315</code> · <code class="mono">346</code> · <code class="mono">351</code> · <code class="mono">361</code></span></div>
+            <p>The mathematics of deep learning, data assimilation and uncertainty quantification, applied to medical imaging, cardiac modeling, storm surge and disease outbreaks. The largest group in the department, and the one closest to what we do in the Kaggle sessions.</p>
+            <p class="fac">Julianne Chung · Matthias Chung · Bree Ettinger · Manuela Girotti · Manuela Manetta · Talea Mayo · James Nagy · Levon Nurbekyan · Lars Ruthotto · Marco Tezzele · Alessandro Veneziani · Yuanzhe Xi</p>
+          </div>
+          <div class="right"><a class="src" href="https://mathematics.emory.edu/research/computational.html">Department page ↗</a></div>
+        </div>
+        <div class="row" data-h="compete">
+          <div>
+            <h4>Discrete Mathematics and Combinatorics</h4>
+            <div class="meta"><span>Leads in via <code class="mono">MATH 250</code></span></div>
+            <p>Graphs, extremal problems, and the interaction between convex sets and lattices. The area closest to competition problems.</p>
+            <p class="fac">Cosmin Pohoata · Aleksandr Polianskii · Vojtech Rodl · Robert Roth · Liana Yepremyan</p>
+          </div>
+          <div class="right"><a class="src" href="https://mathematics.emory.edu/research/discrete-mathematics.html">Department page ↗</a></div>
+        </div>
+        <div class="row" data-h="connect">
+          <div>
+            <h4>Pedagogy</h4>
+            <div class="meta"><span>How people learn mathematics</span></div>
+            <p>How people learn and engage with mathematics, across cognitive, social and cultural dimensions. Several of the people who teach the courses you are in.</p>
+            <p class="fac">Michael Carr · Bree Ettinger · Neha Gupta · Andrew Lyons · Manuela Manetta · Juan Villeta-Garcia</p>
+          </div>
+          <div class="right"><a class="src" href="https://mathematics.emory.edu/research/index.html">Department page ↗</a></div>
+        </div>
+      </div>
+
+      <div class="sechead" style="margin-top:clamp(2.5rem,5vw,3.5rem)">
+        <p class="lab">Getting in</p>
+        <h3 class="refhead">Undergraduate Research Opportunities</h3>
+        <p>Every route into research open to an Emory undergraduate, with the one thing about each that is easy to miss.</p>
+      </div>
+
+      <div class="channels">
+        <div class="lead">
+          <span class="k">Start here</span>
+          <h4>Directed Reading Program</h4>
+          <p>One credit, one graduate mentor, one topic you chose. The lowest-commitment way to find out whether you like research at all.</p>
+          <a class="go" href="https://math.emory.edu/~drp/">math.emory.edu/~drp →</a>
+        </div>
+        <div>
+          <span class="k">Summer · paid</span>
+          <h4>SURE</h4>
+          <p>Ten weeks of full-time research with a faculty mentor, a stipend and campus housing. It also satisfies the XA general education requirement. Decisions go out in early March, so the mentor conversation happens in the fall.</p>
+          <a class="go" href="https://college.emory.edu/undergraduate-research/summer-programs/sure.html">SURE at Emory College →</a>
+        </div>
+        <div>
+          <span class="k">Summer · in the department</span>
+          <h4>CMDS REU / RET</h4>
+          <p>The department&rsquo;s own summer program in Computational Mathematics for Data Science, run by the CODES group. Closest fit if the Kaggle sessions were the part you liked.</p>
+          <a class="go" href="http://www.math.emory.edu/site/cmds-reuret/">math.emory.edu/cmds-reuret →</a>
+        </div>
+        <div>
+          <span class="k">Search</span>
+          <h4>Opportunity Finder</h4>
+          <p>Emory College&rsquo;s searchable list of open undergraduate research positions across every department, including ones outside mathematics that want quantitative students.</p>
+          <a class="go" href="https://college.emory.edu/undergraduate-research/opportunity/opportunity-finder.html">Opportunity Finder →</a>
+        </div>
+      </div>
+
+      <div class="sechead" style="margin-top:clamp(2.5rem,5vw,3.5rem)">
+        <p class="lab">Reference</p>
+        <h3 class="refhead">When Each Course Runs</h3>
+        <p><code class="mono">MATH 421</code>, for instance, is offered in the fall only. Worth knowing before you plan a spring around it.</p>
+      </div>
+
+      <div class="glancewrap">
+        <table class="glance tight">
+          <caption>Department of Mathematics · undergraduate courses</caption>
+          <thead><tr><th>Every semester</th><th>Fall only</th><th>Spring only</th><th>Occasionally</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>
+                <code>MATH 111</code> Calculus I<br>
+                <code>MATH 112</code> Calculus II<br>
+                <code>MATH 211</code> Multivariable Calculus<br>
+                <code>MATH 212</code> Differential Equations<br>
+                <code>MATH 221</code> Linear Algebra<br>
+                <code>MATH 250</code> Foundations of Mathematics<br>
+                <code>MATH 315</code> Numerical Analysis<br>
+                <code>MATH 346</code> Linear Optimization<br>
+                <code>MATH 351</code> Partial Differential Equations
+              </td>
+              <td>
+                <code>MATH 275</code> Honors track I<br>
+                <code>MATH 318</code> Complex Variables<br>
+                <code>MATH 361</code> Mathematical Statistics I<br>
+                <code>MATH 411</code> Real Analysis I<br>
+                <code>MATH 421</code> Abstract Algebra I
+              </td>
+              <td>
+                <code>MATH 276</code> Honors track II<br>
+                <code>MATH 321</code> Vector Spaces<br>
+                <code>MATH 362</code> Mathematical Statistics II<br>
+                <code>MATH 412</code> Real Analysis II<br>
+                <code>MATH 422</code> Abstract Algebra II
+              </td>
+              <td>
+                <code>MATH 328</code> · <code>MATH 330</code><br>
+                <code>MATH 344</code> Differential Geometry<br>
+                <code>MATH 345</code> Mathematical Modeling<br>
+                <code>MATH 347</code> Nonlinear Optimization<br>
+                <code>MATH 352</code> PDEs in Action
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===================================== PEOPLE ===================================== -->
+<main class="page" id="p-people" tabindex="-1" hidden>
+  <div class="pagehead" data-h="connect">
+    <div class="headrule solid"></div>
+    <div class="paperlayer paperbg" aria-hidden="true" style="position:absolute;inset:0;opacity:.7"></div>
+    <div class="wrap">
+      <div class="crumb"><span>EUMMA / <span class="here">Team</span></span></div>
+      <h1>Team</h1>
+      <p>The students who run EUMMA, and the faculty and graduate students we work with.</p>
+    </div>
+  </div>
+
+  <section class="blk">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Executive board</p>
+        <h2>EUMMA Board 2025–2026</h2>
+      </div>
+      <div class="people">
+        <div class="person">
+          <div class="ph" aria-hidden="true"></div>
+          <div class="info">
+            <h3>Mingke Tian</h3>
+            <span class="role">President · Registered contact</span>
+            <a class="mail" href="mailto:mingke.tian@emory.edu">mingke.tian@emory.edu</a>
+            <p>Hi! I’m Mingke (Britney) Tian, a senior in Applied Mathematics and Statistics &amp; Computer Science. I work on multimodal and structured ML algorithms, agentic systems, and world models for complex scientific and engineering problems. Last year I initiated the “AI4S&amp;E” workshop and the Kaggle competition training program. I am also EUMMA’s registered contact and web builder. Feel free to reach out if you have any questions about the club!</p>
+          </div>
+        </div>
+        <div class="person">
+          <div class="ph" aria-hidden="true"></div>
+          <div class="info">
+            <h3>Eika Zhou</h3>
+            <span class="role">Treasurer</span>
+            <a class="mail" href="mailto:yingjia.zhou@emory.edu">yingjia.zhou@emory.edu</a>
+            <p>One or two sentences in your own voice: year, what you study, and something you like.</p>
+          </div>
+        </div>
+        <div class="person">
+          <div class="ph" aria-hidden="true"></div>
+          <div class="info">
+            <h3>Nicole Chen</h3>
+            <span class="role">VP of General Events</span>
+            <a class="mail" href="mailto:yiyun.chen@emory.edu">yiyun.chen@emory.edu</a>
+            <p>Hi! I’m Yiyun (Nicole) Chen, a senior at Emory University studying Computer Science and Applied Mathematics &amp; Statistics. My academic interests lie in machine learning, with a focus on reliable and uncertainty-aware models, as well as agentic AI systems. I’m particularly interested in developing these methods for healthcare and clinical applications, where reliability and reasoning are critical. In my free time, I enjoy playing board games with friends.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tint">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Panels</p>
+        <h2>Panel Guests</h2>
+        <p>Faculty who have spoken at EUMMA panels. Our events exist because they say yes.</p>
+      </div>
+      <div class="rows">
+        <div class="row" data-h="connect">
+          <div>
+            <h3>Dr. David Borthwick</h3>
+            <div class="meta"><span>Professor · Interim Chair</span><span>Dept. of Mathematics</span></div>
+            <p>Spoke at our Grad Panel in October 2024 on post-graduate academic paths and how to prepare for them. Faculty advisor to the Directed Reading Program.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="connect"><i></i>Grad Panel</span></div>
+        </div>
+        <div class="row" data-h="research">
+          <div>
+            <h3>Prof. Elizabeth Newman</h3>
+            <div class="meta"><span>Assistant Professor</span><span>Computational mathematics</span></div>
+            <p>Took part in our Undergraduate Research Panels in October 2023 and October 2024, on how undergraduates find a first research project.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="research"><i></i>Research Panel</span></div>
+        </div>
+        <div class="row" data-h="research">
+          <div>
+            <h3>Prof. Michelangelo Grigni</h3>
+            <div class="meta"><span>Joint Faculty</span><span>Discrete mathematics</span></div>
+            <p>Discrete mathematics and algorithms.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="research"><i></i>Panel Guest</span></div>
+        </div>
+        <div class="row" data-h="research">
+          <div>
+            <h3>Prof. Alessandro Veneziani</h3>
+            <div class="meta"><span>Professor</span><span>Scientific computing</span></div>
+            <p>Applied mathematics, partial differential equations, and cardiovascular modeling: numerical analysis carried from the theorem to the operating room.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="research"><i></i>Research Panel</span></div>
+        </div>
+        <div class="row" data-h="research">
+          <div>
+            <h3>Prof. Liana Yepremyan</h3>
+            <div class="meta"><span>Assistant Professor</span><span>Discrete mathematics</span></div>
+            <p>Extremal combinatorics and graph theory. Awarded the 2025 Emil Artin Junior Prize in Mathematics.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="research"><i></i>Research Panel</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Department</p>
+        <h2>Faculty and Staff</h2>
+      </div>
+      <div class="rows">
+        <div class="row" data-h="ai">
+          <div>
+            <h3>Dr. James G. Nagy</h3>
+            <div class="meta"><span>Samuel Candler Dobbs Professor</span><span>Dept. of Mathematics</span></div>
+            <p>Numerical linear algebra, scientific computing, and ill-posed inverse problems in signal and image processing.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="ai"><i></i>Scientific Computing</span></div>
+        </div>
+        <div class="row" data-h="research">
+          <div>
+            <h3>Dr. Manuela Manetta</h3>
+            <div class="meta"><span>Associate Teaching Professor</span><span>Dept. of Mathematics</span></div>
+            <p>Honors Program Coordinator for the mathematics major, and the person to talk to about writing an honors thesis.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="research"><i></i>Honors Program</span></div>
+        </div>
+        <div class="row" data-h="ai">
+          <div>
+            <h3>Dr. Yuanzhe Xi</h3>
+            <div class="meta"><span>Associate Professor</span><span>Dept. of Mathematics</span></div>
+            <p>Scientific computing, numerical linear algebra, optimization, and deep learning. This is the mathematics directly underneath our Kaggle and machine learning sessions.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="ai"><i></i>Scientific Computing</span></div>
+        </div>
+        <div class="row" data-h="research">
+          <div>
+            <h3>Dr. Andrew H. Lyons</h3>
+            <div class="meta"><span>Assistant Teaching Professor</span><span>Dept. of Mathematics</span></div>
+            <p>Elliptic eigenvalue problems on compact manifolds with boundary. Joined Emory after completing his PhD at the University of North Carolina at Chapel Hill in 2025.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="research"><i></i>Analysis</span></div>
+        </div>
+        <div class="row" data-h="connect">
+          <div>
+            <h3>Amy Dickson</h3>
+            <div class="meta"><span>Undergraduate Program Coordinator</span><span>MSC W401A</span></div>
+            <p>Coordinates the undergraduate program in the Department of Mathematics. The person to ask about requirements, registration, and paperwork.</p>
+          </div>
+          <div class="right"><span class="cat" data-h="connect"><i></i>Undergraduate Program</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tint">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Alumni</p>
+        <h2>Past Executive Board Members</h2>
+        <p>The students who ran EUMMA before this board.</p>
+      </div>
+      <div class="people">
+        <div class="person">
+          <div class="ph" aria-hidden="true"></div>
+          <div class="info">
+            <h3>To be added</h3>
+            <span class="role">Past President</span>
+            <p>One or two sentences in their own voice, the same as the current board above.</p>
+          </div>
+        </div>
+        <div class="person">
+          <div class="ph" aria-hidden="true"></div>
+          <div class="info">
+            <h3>To be added</h3>
+            <span class="role">Past Treasurer</span>
+            <p>One or two sentences in their own voice, the same as the current board above.</p>
+          </div>
+        </div>
+      </div>
+      <div class="tbd" style="margin-top:1.75rem">
+        <strong>Needs board input</strong>
+        For each past officer: name, the position they held, a photo, and one or two sentences. Send them in the order you want them listed.
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===================================== JOIN ===================================== -->
+<main class="page" id="p-join" tabindex="-1" hidden>
+  <div class="pagehead" data-h="brand">
+    <div class="headrule solid"></div>
+    <div class="paperlayer paperbg" aria-hidden="true" style="position:absolute;inset:0;opacity:.7"></div>
+    <div class="wrap">
+      <div class="crumb"><span>EUMMA / <span class="here">Join Us</span></span></div>
+      <h1>Join Us</h1>
+    </div>
+  </div>
+
+  <section class="blk">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Channels</p>
+        <h2>How to Reach Us</h2>
+      </div>
+      <div class="channels">
+        <div class="lead">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"></path><path d="M9 21v-7h6v7"></path></svg>
+          <span class="k">Primary · start here</span>
+          <h3>The Hub</h3>
+          <p>Official registration. Emory login required.</p>
+          <a class="go" href="https://thehub.emory.edu/EUMMA/">thehub.emory.edu/EUMMA →</a>
+        </div>
+        <div>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20.5l1.6-4.6A8.3 8.3 0 0 1 3.6 11.5 8.4 8.4 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"></path></svg>
+          <span class="k">Day to day</span>
+          <h3>GroupMe &amp; WeChat</h3>
+          <p>Where events are announced first, and where people ask what is happening this week.</p>
+          <span class="go pending">Links to be added</span>
+        </div>
+        <div>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
+          <span class="k">Follow</span>
+          <h3>Instagram</h3>
+          <p>Photos from past events and reminders.</p>
+          <a class="go" href="https://www.instagram.com/emoryeumma/">@emoryeumma →</a>
+        </div>
+        <div>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+          <span class="k">Email</span>
+          <h3>Email Us</h3>
+          <p>Questions, collaborations, or if you want to run an event with us.</p>
+          <a class="go" href="mailto:mingke.tian@emory.edu">mingke.tian@emory.edu</a>
+        </div>
+      </div>
+
+      <div class="qrs" id="qrblock">
+        <figure class="qr" id="qrGroupme">
+          <img src="qr-groupme.png" alt="QR code to join the EUMMA GroupMe">
+          <figcaption><span class="k">GroupMe</span>Scan to join the group</figcaption>
+        </figure>
+        <figure class="qr" id="qrWechat">
+          <img src="qr-wechat.png" alt="QR code to join the EUMMA WeChat group">
+          <figcaption><span class="k">WeChat</span>Scan to join <span class="mono">EUMMA 25-26</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tint" id="poster-block">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Poster</p>
+        <h2>Poster</h2>
+        <p>Our 2025&ndash;26 poster. Print it or repost it. It carries both QR codes.</p>
+      </div>
+      <figure class="poster" id="posterFig">
+        <img id="posterImg" src="eumma-poster-2025.png" alt="EUMMA recruitment poster: the Emory Undergraduate MatheMatics Association, its four pillars, the events it runs, and QR codes for the Emory Hub and the GroupMe.">
+        <figcaption>
+          <span class="mono">EUMMA recruitment poster &middot; 2025&ndash;26</span>
+          <span class="mono">Emory Hub &amp; GroupMe QR codes included</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="blk">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Recruiting</p>
+        <h2>Open Positions</h2>
+        <p>Three seats on the board are open.</p>
+      </div>
+      <div class="rows">
+        <div class="row plain">
+          <div>
+            <h3>VP for Communication</h3>
+            <div class="meta"><span>Weekly commitment</span><span>Any major or year</span></div>
+            <p>Runs the newsletter and the opportunities board, keeps Instagram and the posters going, and keeps the deadlines on this site current.</p>
+          </div>
+          <div class="right"><span class="chip hot">Open</span></div>
+        </div>
+        <div class="row plain">
+          <div>
+            <h3>VP for Event Planning (Academic)</h3>
+            <div class="meta"><span>Per-event commitment</span><span>Any major or year</span></div>
+            <p>The academic half of the calendar: panels, workshops, and the training sessions. Lining up speakers, and making sure each session has somewhere to happen.</p>
+          </div>
+          <div class="right"><span class="chip hot">Open</span></div>
+        </div>
+        <div class="row plain">
+          <div>
+            <h3>Secretary</h3>
+            <div class="meta"><span>Per-event commitment</span><span>Any major or year</span></div>
+            <p>Meeting notes, the member roster, and the record of what the club has run. That record is how next year's board knows what worked.</p>
+          </div>
+          <div class="right"><span class="chip hot">Open</span></div>
+        </div>
+      </div>
+      <p class="contactline">Interested? Email <a href="mailto:mingke.tian@emory.edu">mingke.tian@emory.edu</a>.</p>
+    </div>
+  </section>
+
+  <section class="blk tint">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="lab">Questions</p>
+        <h2>FAQ</h2>
+      </div>
+      <div class="faq">
+        <div><h3>Do I have to be a math major?</h3><p>No. Most members study Mathematics, Applied Mathematics or AMS, but plenty do not. Every event is open to any Emory student.</p></div>
+        <div><h3>Is there a fee?</h3><p>No. Food at events is paid for by the club.</p></div>
+        <div><h3>How often do you meet?</h3><p>About two events a month during term, plus study sessions around midterms and finals.</p></div>
+        <div><h3>Can my organization co-host with EUMMA?</h3><p>Yes. Panels, workshops and joint socials. Email the board.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip">
+    <div class="wrap">
+      <div>
+        <h2>Register on The Hub.</h2>
+        <p>It is free and it takes a minute. That is how you hear about everything else.</p>
+      </div>
+      <a class="btn" href="https://thehub.emory.edu/EUMMA/">Go to The Hub →</a>
+    </div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="spectrum"><i></i><i></i><i></i><i></i></div>
+  <div class="wrap">
+    <div>
+      <div class="name">EUMMA</div>
+      <p>A recognized student organization of Emory College of Arts and Sciences, founded 2005. EUMMA works alongside and is supported by the Department of Mathematics and its faculty members. Our thanks to the faculty, e-board members, and general members who make these events possible.</p>
+    </div>
+    <div>
+      <h5>Pages</h5>
+      <ul>
+        <li><a href="#/" data-nav>Home</a></li>
+        <li><a href="#/events" data-nav>Events</a></li>
+        <li><a href="#/training" data-nav>Competitions and Training</a></li>
+        <li><a href="#/people" data-nav>Team</a></li>
+        <li><a href="#/join" data-nav>Join Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Affiliated</h5>
+      <ul>
+        <li><a href="https://thehub.emory.edu/EUMMA/">The Hub</a></li>
+        <li><a href="https://www.instagram.com/emoryeumma/">Instagram</a></li>
+        <li><a href="https://mathematics.emory.edu/">Dept. of Mathematics</a></li>
+        <li><a href="https://math.emory.edu/~drp/">Directed Reading Program</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="wrap">
+      <span>© 2026 Emory Undergraduate MatheMatics Association.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================== data ============================== */
+var EVENTS=[
+  {d:"2026-10-16",t:"Research Panel",time:"TBC",room:"TBC",cat:"research",desc:"Undergraduates who have done research explain how they found a first project: which emails they sent, when, and what they had taken beforehand. Faculty answer what they look for."},
+  {d:"2026-11-13",t:"Kaggle / MCM Competition Training IV",time:"TBC",room:"TBC",cat:"compete",desc:"The last of the four. Writing a model up in MCM format under a deadline: assumptions, sensitivity analysis, and the one-page summary that carries most of the score."},
+  {d:"2026-10-30",t:"Kaggle / MCM Competition Training III",time:"TBC",room:"TBC",cat:"compete",desc:"Competition season. How to read a contest brief, form a team of three, and split the work between modeling, coding and writing before the clock starts rather than after."},
+  {d:"2026-12-05",t:"Finals Study Session",time:"TBC",room:"TBC",cat:"study",desc:"An open room through finals week with food, and upperclassmen who have already taken the course on hand. Bring the problem set you are stuck on."},
+  {d:"2026-04-00",t:"Career Exploration Panel",time:"April 2026",room:"",cat:"connect",desc:"Where a mathematics degree actually goes. Speakers from industry, graduate programs, and the routes in between on how they chose and what the first year after Emory looked like."},
+  {d:"2026-03-00",t:"Kaggle Competition Training II",time:"March 2026",room:"",cat:"ai",desc:"The second half of the Kaggle sequence: cross-validation that does not lie to you, feature engineering, and gradient boosting. We finish by reading the winning solutions."},
+  {d:"2026-02-00",t:"Kaggle Competition Training I",time:"February 2026",room:"",cat:"ai",desc:"From an empty notebook to a first submission in one session. Reading the brief, building a baseline, and getting a score on the leaderboard before touching anything clever."},
+  {d:"2026-02-00",t:"Honors Thesis Panel",time:"February 2026",room:"",cat:"research",desc:"Seniors partway through a thesis on how they chose a topic, how they found an advisor, and how the writing is actually paced across two semesters."},
+  {d:"2026-01-00",t:"AI4S&E Workshop",time:"January 2026",room:"",cat:"ai",desc:"AI for Science and Engineering, and the first session of its kind at EUMMA. Where machine learning is genuinely used on scientific problems, and the linear algebra and optimization underneath it."},
+  {d:"2025-11-00",t:"Grad Panel",time:"November 2025",room:"",cat:"connect",desc:"Applying to mathematics graduate programs, with faculty and graduate students who have read the applications: what the statement of purpose is for, who to ask for letters, and when deadlines fall."},
+  {d:"2025-10-00",t:"Undergraduate Research Panel",time:"October 2025",room:"",cat:"research",desc:"The annual research panel. Undergraduates describe the projects they joined and how they got in, alongside faculty on what they expect from a student who has never done research."},
+  {d:"2025-09-00",t:"Networking with Industry Alumni",time:"September 2025",room:"",cat:"connect",desc:"Emory alumni now working in industry on what they actually do day to day, how the degree carried over, and what they would have done differently as undergraduates."},
+  {d:"2025-02-00",t:"Honors Thesis Panel",time:"February 2025",room:"",cat:"research",desc:"The first of these. Seniors on choosing a thesis topic, finding an advisor willing to take you, and what a year of thesis work costs week to week."},
+  {d:"2025-03-27",t:"Speed Date with Grads",time:"5:30–6:30 PM",room:"MSC Lobby",cat:"connect",desc:"Short, rotating conversations with Emory mathematics graduate students, a few minutes each. Separate sign-ups for undergraduates and graduates so the numbers match."},
+  {d:"2024-12-11",t:"Math Finals Study Session",time:"2:00–5:00 PM",room:"MSC W201",cat:"study",desc:"A quiet room to review in before finals, with upperclassmen there for the calculus sequence and linear algebra. Bring your textbooks and whatever you are stuck on."},
+  {d:"2024-12-06",t:"Study Break",time:"1:00–5:00 PM",room:"MSC E208",cat:"social",desc:"Pizza and energy drinks in the week everything is due at once. No agenda, no sign-up."},
+  {d:"2024-11-07",t:"Game Night",time:"6:30–8:00 PM",room:"MSC Lobby",cat:"social",desc:"Texas Hold'em, Uno and chess, with pizza. The event that assumes the least, and the easiest one to arrive at alone."},
+  {d:"2024-10-30",t:"Grad Panel",time:"5:30–6:30 PM",room:"MSC N304",cat:"connect",desc:"With Dr. David Borthwick, then Director of Graduate Studies, on post-graduate academic paths: what coursework matters, when to start asking for letters, and what an application is judged on."},
+  {d:"2024-10-00",t:"Undergraduate Research Panel",time:"October 2024",room:"",cat:"research",desc:"Undergraduates describe how they found a first research project, with faculty who supervise undergraduate work on what they look for in a first email."},
+  {d:"2023-10-00",t:"Undergraduate Research Panel",time:"October 2023",room:"",cat:"research",desc:"The first research panel EUMMA ran, and the format that became an annual fixture."},
+  {d:"2023-09-00",t:"Math Major & Minor Panel",time:"September 2023",room:"",cat:"connect",desc:"Current majors and minors answer what the catalog cannot: which courses in which order, how the major and minor differ in practice, and what to do if you are deciding late."}
+];
+var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+var MSHORT=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+/* the one taxonomy the whole site is colored by */
+var CAT={
+  compete :{n:"Compete",    h:"#D0651F"},
+  connect :{n:"Connect",    h:"#C08C0C"},
+  ai      :{n:"Explore AI", h:"#15889A"},
+  research:{n:"Research",   h:"#7E3576"},
+  study   :{n:"Study",      h:"#237567"},
+  social  :{n:"Social",     h:"#5480A6"}
+};
+var CATORDER=["research","connect","study","social","compete","ai"];
+function catName(k){return CAT[k]?CAT[k].n:k;}
+function parts(s){var a=s.split("-");return{y:+a[0],m:+a[1],d:+a[2]};}
+function dated(e){var p=parts(e.d);return p.y>0&&p.m>0&&p.d>0;}
+
+document.documentElement.lang="en";
+
+/* ============================== router ============================== */
+var PAGES={"/":"p-home","/events":"p-events","/training":"p-training","/people":"p-people","/join":"p-join"};
+function route(){
+  var r=(location.hash||"#/").replace(/^#/,"");
+  if(!PAGES[r])r="/";
+  Object.keys(PAGES).forEach(function(k){
+    document.getElementById(PAGES[k]).hidden=(k!==r);
+  });
+  /* the skip link has to point at whichever page is actually showing */
+  var sk=document.querySelector(".skip");
+  if(sk)sk.setAttribute("href","#"+PAGES[r]);
+  [].forEach.call(document.querySelectorAll("nav.main a"),function(a){
+    a.classList.toggle("on",a.getAttribute("data-r")===r);
+  });
+  var nav=document.getElementById("nav");
+  if(window.innerWidth<=940){nav.hidden=true;document.getElementById("burger").setAttribute("aria-expanded","false");}
+  window.scrollTo(0,0);
+  if(r==="/")Field.resize();
+  Field.setActive(r==="/");
+}
+window.addEventListener("hashchange",route);
+
+document.getElementById("burger").addEventListener("click",function(){
+  var nav=document.getElementById("nav"),open=nav.hidden;
+  nav.hidden=!open;this.setAttribute("aria-expanded",String(open));
+});
+function syncNav(){
+  var nav=document.getElementById("nav");
+  if(window.innerWidth>940){nav.hidden=false;}else if(!nav.hasAttribute("hidden")){nav.hidden=true;}
+}
+
+var pb=document.getElementById("protobar"),pc=document.getElementById("protoclose");
+if(pc)pc.addEventListener("click",function(){pb.hidden=true;Field.resize();});
+
+/* current term, computed rather than hand-maintained */
+(function(){
+  var d=new Date(),m=d.getMonth();
+  var t=(m>=7?"Fall ":m<=4?"Spring ":"Summer ")+d.getFullYear();
+  document.getElementById("termNow").textContent=t;
+})();
+
+/* ============================== calendar ============================== */
+var TODAY=new Date(), view=initView(), selDay=null;
+function initView(){
+  var now=TODAY.getFullYear()*12+TODAY.getMonth(), best=null;
+  EVENTS.forEach(function(e){
+    if(!dated(e))return;var p=parts(e.d),k=p.y*12+(p.m-1);
+    if(k>=now&&(best===null||k<best))best=k;
+  });
+  if(best===null)return{y:TODAY.getFullYear(),m:TODAY.getMonth()};
+  return{y:Math.floor(best/12),m:best%12};
+}
+function evOn(y,m,d){
+  return EVENTS.filter(function(e){
+    if(!dated(e))return false;var p=parts(e.d);
+    return p.y===y&&p.m===m+1&&p.d===d;
+  });
+}
+function renderCal(){
+  var grid=document.getElementById("calGrid");grid.innerHTML="";
+  document.getElementById("calTitle").textContent=MONTHS[view.m]+" "+view.y;
+  var first=new Date(view.y,view.m,1).getDay();
+  var days=new Date(view.y,view.m+1,0).getDate();
+  var prevDays=new Date(view.y,view.m,0).getDate();
+  var cells=[],i,d;
+  for(i=first-1;i>=0;i--)cells.push({n:prevDays-i,out:true});
+  for(d=1;d<=days;d++)cells.push({n:d,out:false});
+  var tail=1;
+  while(cells.length%7!==0)cells.push({n:tail++,out:true});
+  cells.forEach(function(c){
+    var el=document.createElement(c.out?"div":"button");
+    if(!c.out)el.type="button";
+    el.className="cell"+(c.out?" out":"");
+    var num=document.createElement("span");num.className="dnum";num.textContent=c.n;el.appendChild(num);
+    if(!c.out){
+      if(view.y===TODAY.getFullYear()&&view.m===TODAY.getMonth()&&c.n===TODAY.getDate())el.classList.add("today");
+      var evs=evOn(view.y,view.m,c.n);
+      if(evs.length){
+        el.classList.add("has");
+        if(selDay===c.n)el.classList.add("sel");
+        evs.forEach(function(e){
+          var p=document.createElement("span");
+          p.className="pip"+(e.draft?" draft":"");
+          p.setAttribute("data-h",e.cat);
+          p.textContent=e.t;el.appendChild(p);
+        });
+        el.addEventListener("click",function(){selDay=c.n;renderCal();showDay(c.n,evs);});
+      }else{el.disabled=true;el.style.cursor="default";}
+    }
+    grid.appendChild(el);
+  });
+  if(selDay===null)monthList();
+}
+function itemHTML(e,showDate){
+  var p=parts(e.d);
+  var dt=showDate?(MSHORT[p.m-1]+" "+p.d):(e.time||"");
+  return '<li data-h="'+e.cat+'"><span class="dt">'+dt+(showDate&&e.time?'<br>'+e.time:'')+'</span>'+
+    '<div><strong>'+e.t+'</strong>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.4rem">'+
+      '<span class="cat" data-h="'+e.cat+'"><i></i>'+catName(e.cat)+'</span>'+
+      (e.room?'<span class="room">'+e.room+'</span>':'')+
+    '</div><p>'+e.desc+'</p></div></li>';
+}
+function monthList(){
+  var evs=EVENTS.filter(function(e){
+    if(!dated(e))return false;var p=parts(e.d);
+    return p.y===view.y&&p.m===view.m+1;
+  }).sort(function(a,b){return a.d<b.d?-1:1;});
+  document.getElementById("sideTitle").textContent=MONTHS[view.m]+" "+view.y;
+  var note=document.getElementById("sideNote"),list=document.getElementById("sideList");
+  if(!evs.length){
+    note.textContent="Nothing scheduled this month. Use the arrows to browse other months, or follow @emoryeumma, where the next one is announced first.";
+    list.innerHTML="";
+  }else{
+    note.textContent=evs.length+" event"+(evs.length>1?"s":"")+" this month.";
+    list.innerHTML=evs.map(function(e){return itemHTML(e,true);}).join("");
+  }
+}
+function showDay(d,evs){
+  document.getElementById("sideTitle").textContent=MONTHS[view.m]+" "+d+", "+view.y;
+  document.getElementById("sideNote").textContent="";
+  document.getElementById("sideList").innerHTML=evs.map(function(e){return itemHTML(e,false);}).join("");
+}
+function stepMonth(k){
+  selDay=null;view.m+=k;
+  if(view.m<0){view.m=11;view.y--;}
+  if(view.m>11){view.m=0;view.y++;}
+  renderCal();monthList();
+}
+document.getElementById("calPrev").addEventListener("click",function(){stepMonth(-1);});
+document.getElementById("calNext").addEventListener("click",function(){stepMonth(1);});
+document.getElementById("calToday").addEventListener("click",function(){selDay=null;view={y:TODAY.getFullYear(),m:TODAY.getMonth()};renderCal();monthList();});
+
+/* ============================== archive ============================== */
+function termOf(e){
+  if(!/^\d{4}/.test(e.d)||e.d==="0000-00-00")return "Date to be recovered";
+  var p=parts(e.d);
+  if(p.m===0)return "Fall "+p.y;
+  return (p.m>=8?"Fall ":p.m>=1&&p.m<=5?"Spring ":"Summer ")+p.y;
+}
+function renderArchive(filter){
+  var host=document.getElementById("archive");
+  var list=EVENTS.filter(function(e){return filter==="all"||e.cat===filter;})
+                 .sort(function(a,b){return a.d<b.d?1:-1;});
+  var terms=[],seen={};
+  list.forEach(function(e){var t=termOf(e);if(!seen[t]){seen[t]=[];terms.push(t);}seen[t].push(e);});
+  if(!terms.length){
+    host.innerHTML='<div class="tbd"><strong>Nothing logged in this category</strong>'+
+      'EUMMA has run these. They are just not in the record yet.</div>';
+    return;
+  }
+  host.innerHTML=terms.map(function(t){
+    var n=seen[t].length;
+    return '<div class="term"><h3><span>'+t+'</span><em>'+n+(n>1?' events':' event')+'</em></h3>'+seen[t].map(function(e){
+      var p=parts(e.d),when;
+      if(dated(e)){when=MSHORT[p.m-1]+" "+p.d+", "+p.y+(e.time&&e.time!=="TBC"?"<br>"+e.time:"");}
+      else{when=e.time||"Date unknown";}
+      return '<div class="ev" data-h="'+e.cat+'"><span class="when">'+when+'</span>'+
+        '<div><h4>'+e.t+(e.room?' <span class="room">'+e.room+'</span>':'')+
+        '</h4><p>'+e.desc+'</p></div>'+
+        '<span class="cat" data-h="'+e.cat+'"><i></i>'+catName(e.cat)+'</span></div>';
+    }).join("")+'</div>';
+  }).join("");
+}
+function calendarKey(){
+  document.getElementById("calKey").innerHTML=CATORDER.filter(function(k){
+    return EVENTS.some(function(e){return e.cat===k;});
+  }).map(function(k){
+    return '<span><i style="background:'+CAT[k].h+'"></i>'+CAT[k].n+'</span>';
+  }).join("");
+}
+[].forEach.call(document.querySelectorAll("#filters button"),function(b){
+  b.addEventListener("click",function(){
+    [].forEach.call(document.querySelectorAll("#filters button"),function(x){x.classList.remove("on");});
+    b.classList.add("on");renderArchive(b.getAttribute("data-f"));
+  });
+});
+
+/* ==========================================================================
+   HERO FIELD
+   A non-convex objective f(x,y): level sets drawn once by marching squares,
+   with a live ensemble of trajectories integrating  v <- mu*v - eta*grad f,
+   which is momentum gradient descent. Every one of them falls into a basin.
+   ========================================================================== */
+var Field=(function(){
+  var levC=document.getElementById("cLevels"),levX=levC.getContext("2d");
+  var flowC=document.getElementById("cFlow"),flowX=flowC.getContext("2d");
+  var W=0,H=0,DPR=1,active=true,visible=true,raf=null;
+  var X0=0,X1=0,Y0=0,Y1=0,NX=0,NY=0,G=null,LO=0,HI=0;
+  var P=[],MU=0.93,ETA=0.0028;
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function sq(v){return v*v;}
+  function f(x,y){
+    var v=0.082*(x*x+1.15*y*y);
+    v-=2.10*Math.exp(-(sq(x+3.10)+sq(y+0.55))/0.95);
+    v-=1.55*Math.exp(-(sq(x+0.55)+sq(y-1.15))/1.25);
+    v-=1.90*Math.exp(-(sq(x-2.25)+sq(y+0.95))/1.05);
+    v-=1.10*Math.exp(-(sq(x-4.30)+sq(y-0.85))/0.85);
+    v-=0.95*Math.exp(-(sq(x-0.90)+sq(y+1.80))/0.70);
+    v+=0.34*Math.sin(1.05*x)*Math.cos(1.25*y);
+    return v;
+  }
+  function gx(x,y){var h=1e-3;return (f(x+h,y)-f(x-h,y))/(2*h);}
+  function gy(x,y){var h=1e-3;return (f(x,y+h)-f(x,y-h))/(2*h);}
+
+  function sx(x){return (x-X0)/(X1-X0)*W;}
+  function sy(y){return (Y1-y)/(Y1-Y0)*H;}
+
+  /* isotropic domain: the field is never stretched by the viewport */
+  function domain(){
+    var halfY=2.45, halfX=halfY*(W/Math.max(H,1));
+    halfX=Math.max(halfX,3.0);
+    X0=-halfX+0.6;X1=halfX+0.6;Y0=-halfY;Y1=halfY;
+    NX=Math.max(90,Math.min(240,Math.round(W/5.2)));
+    NY=Math.max(60,Math.round(NX*(Y1-Y0)/(X1-X0)));
+  }
+  function sample(){
+    G=new Float32Array(NX*NY);LO=1e9;HI=-1e9;
+    for(var j=0;j<NY;j++)for(var i=0;i<NX;i++){
+      var x=X0+(X1-X0)*i/(NX-1),y=Y0+(Y1-Y0)*j/(NY-1),v=f(x,y);
+      G[j*NX+i]=v;if(v<LO)LO=v;if(v>HI)HI=v;
+    }
+  }
+  function isoline(lev){
+    var dx=(X1-X0)/(NX-1),dy=(Y1-Y0)/(NY-1);
+    for(var j=0;j<NY-1;j++)for(var i=0;i<NX-1;i++){
+      var a=G[j*NX+i],b=G[j*NX+i+1],c=G[(j+1)*NX+i+1],d=G[(j+1)*NX+i];
+      var idx=(a>lev?8:0)|(b>lev?4:0)|(c>lev?2:0)|(d>lev?1:0);
+      if(idx===0||idx===15)continue;
+      var x0=X0+i*dx,y0=Y0+j*dy,x1=x0+dx,y1=y0+dy;
+      var tAB=(lev-a)/(b-a),tBC=(lev-b)/(c-b),tDC=(lev-d)/(c-d),tAD=(lev-a)/(d-a);
+      var T=[x0+dx*cl(tAB),y0],R=[x1,y0+dy*cl(tBC)],B=[x0+dx*cl(tDC),y1],L=[x0,y0+dy*cl(tAD)];
+      var s;
+      switch(idx){
+        case 1:case 14:s=[L,B];break;
+        case 2:case 13:s=[B,R];break;
+        case 3:case 12:s=[L,R];break;
+        case 4:case 11:s=[T,R];break;
+        case 6:case 9: s=[T,B];break;
+        case 7:case 8: s=[L,T];break;
+        case 5: levX.moveTo(sx(L[0]),sy(L[1]));levX.lineTo(sx(T[0]),sy(T[1]));s=[B,R];break;
+        case 10:levX.moveTo(sx(L[0]),sy(L[1]));levX.lineTo(sx(B[0]),sy(B[1]));s=[T,R];break;
+        default:s=null;
+      }
+      if(s){levX.moveTo(sx(s[0][0]),sy(s[0][1]));levX.lineTo(sx(s[1][0]),sy(s[1][1]));}
+    }
+  }
+  function cl(t){return t<0?0:t>1?1:t;}
+
+  function drawLevels(){
+    levX.clearRect(0,0,W,H);
+    var L=23;
+    for(var k=0;k<L;k++){
+      var frac=k/(L-1),a=1-frac;
+      var lev=LO+(HI-LO)*Math.pow(frac,1.55);
+      var r=Math.round(243+(158-243)*a),
+          g=Math.round(226+(27-226)*a),
+          b=Math.round(226+(37-226)*a);
+      levX.strokeStyle="rgba("+r+","+g+","+b+","+(0.26+0.40*a).toFixed(3)+")";
+      levX.lineWidth=a>0.74?1.1:0.75;
+      levX.beginPath();
+      isoline(lev);
+      levX.stroke();
+    }
+    /* the global minimum, marked the way a plot marks it */
+    var bi=0;for(var q=1;q<G.length;q++)if(G[q]<G[bi])bi=q;
+    var mx=X0+(X1-X0)*(bi%NX)/(NX-1), my=Y0+(Y1-Y0)*Math.floor(bi/NX)/(NY-1);
+    var px=sx(mx),py=sy(my);
+    levX.strokeStyle="rgba(158,27,37,.55)";levX.lineWidth=1;
+    levX.beginPath();
+    levX.moveTo(px-7,py);levX.lineTo(px+7,py);
+    levX.moveTo(px,py-7);levX.lineTo(px,py+7);
+    levX.stroke();
+    levX.fillStyle="rgba(158,27,37,.75)";
+    levX.font="500 10px 'IBM Plex Mono', ui-monospace, monospace";
+    levX.fillText("θ*",px+10,py+4);
+  }
+
+  function spawn(p,warm){
+    p.x=X0+Math.random()*(X1-X0);
+    p.y=Y0+Math.random()*(Y1-Y0);
+    p.vx=0;p.vy=0;p.age=0;
+    p.life=240+Math.random()*300;
+    if(warm){var n=Math.floor(Math.random()*170);for(var i=0;i<n;i++)physics(p);}
+    p.px=p.x;p.py=p.y;
+  }
+  function physics(p){
+    p.vx=MU*p.vx-ETA*gx(p.x,p.y);
+    p.vy=MU*p.vy-ETA*gy(p.x,p.y);
+    p.px=p.x;p.py=p.y;
+    p.x+=p.vx;p.y+=p.vy;
+    p.age++;
+  }
+  function dead(p){
+    return p.age>p.life||(Math.abs(p.vx)+Math.abs(p.vy))<0.0008||
+           p.x<X0||p.x>X1||p.y<Y0||p.y>Y1;
+  }
+  function seed(){
+    var n=Math.max(40,Math.min(104,Math.round(W/18)));
+    P=[];for(var i=0;i<n;i++){var p={};spawn(p,true);P.push(p);}
+  }
+
+  function frame(){
+    raf=null;
+    if(!active||!visible)return;
+    /* erase trails slowly, keeping the layer transparent so levels show through */
+    flowX.globalCompositeOperation="destination-out";
+    flowX.fillStyle="rgba(0,0,0,0.028)";
+    flowX.fillRect(0,0,W,H);
+    flowX.globalCompositeOperation="source-over";
+
+    flowX.lineWidth=1;flowX.lineCap="round";
+    flowX.strokeStyle="rgba(158,27,37,0.40)";
+    flowX.beginPath();
+    for(var i=0;i<P.length;i++){
+      var p=P[i];physics(p);
+      if(dead(p)){spawn(p,false);continue;}
+      flowX.moveTo(sx(p.px),sy(p.py));
+      flowX.lineTo(sx(p.x),sy(p.y));
+    }
+    flowX.stroke();
+
+    flowX.fillStyle="rgba(200,32,46,0.78)";
+    for(var j=0;j<P.length;j++){
+      var q=P[j];
+      flowX.fillRect(sx(q.x)-0.8,sy(q.y)-0.8,1.6,1.6);
+    }
+    raf=requestAnimationFrame(frame);
+  }
+  function start(){if(!raf&&active&&visible&&!reduce.matches)raf=requestAnimationFrame(frame);}
+  function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}}
+
+  function resize(){
+    var host=levC.parentNode,r=host.getBoundingClientRect();
+    if(r.width<2||r.height<2)return;
+    DPR=Math.min(2,window.devicePixelRatio||1);
+    W=r.width;H=r.height;
+    [levC,flowC].forEach(function(c){
+      c.width=Math.round(W*DPR);c.height=Math.round(H*DPR);
+    });
+    levX.setTransform(DPR,0,0,DPR,0,0);
+    flowX.setTransform(DPR,0,0,DPR,0,0);
+    domain();sample();drawLevels();
+    flowX.clearRect(0,0,W,H);
+    seed();
+    if(reduce.matches){
+      /* a still frame: one pass of trajectories, no animation */
+      for(var k=0;k<90;k++){
+        flowX.strokeStyle="rgba(158,27,37,0.30)";flowX.lineWidth=1;flowX.beginPath();
+        for(var i=0;i<P.length;i++){var p=P[i];physics(p);if(dead(p)){spawn(p,false);continue;}
+          flowX.moveTo(sx(p.px),sy(p.py));flowX.lineTo(sx(p.x),sy(p.y));}
+        flowX.stroke();
+      }
+      return;
+    }
+    stop();start();
+  }
+  function setActive(on){active=on;if(on)start();else stop();}
+
+  if(window.IntersectionObserver){
+    new IntersectionObserver(function(es){
+      visible=es[0].isIntersecting;
+      if(visible)start();else stop();
+    },{threshold:0}).observe(levC.parentNode);
+  }
+  document.addEventListener("visibilitychange",function(){
+    if(document.hidden)stop();else start();
+  });
+
+  return {resize:resize,setActive:setActive};
+})();
+
+var rt=null;
+window.addEventListener("resize",function(){
+  syncNav();
+  clearTimeout(rt);rt=setTimeout(Field.resize,180);
+});
+
+/* Event posters. The filename is derived from the event itself, so dropping a
+   file into posters/ is all it takes: 2024-10-30-grad-panel.png              */
+function posterSlug(e){
+  var t=e.t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  return "posters/"+e.d+"-"+t+".png";
+}
+function renderPosters(){
+  var grid=document.getElementById("posterGrid"),head=document.getElementById("posterHead");
+  if(!grid)return;
+  var list=EVENTS.slice().sort(function(a,b){return a.d<b.d?1:-1;});
+  var shown=0;
+  list.forEach(function(e){
+    var p=parts(e.d);
+    var when=dated(e)?(MSHORT[p.m-1]+" "+p.d+", "+p.y):(e.time||"");
+    var fig=document.createElement("figure");
+    fig.setAttribute("data-h",e.cat);
+    fig.hidden=true;
+    fig.innerHTML='<figcaption><span class="t"></span><span class="d"></span></figcaption>';
+    fig.querySelector(".t").textContent=e.t;
+    fig.querySelector(".d").textContent=when;
+    var img=document.createElement("img");
+    img.alt="Poster for "+e.t;
+    img.addEventListener("load",function(){fig.hidden=false;shown++;head.hidden=false;});
+    img.addEventListener("error",function(){fig.remove();});
+    img.src=posterSlug(e);
+    fig.appendChild(img);
+    grid.appendChild(fig);
+  });
+}
+
+/* QR codes render only when the images are actually present */
+(function(){
+  var pairs=[["qrGroupme","qr-groupme.png"],["qrWechat","qr-wechat.png"]];
+  var live=pairs.length;
+  pairs.forEach(function(pr){
+    var fig=document.getElementById(pr[0]); if(!fig)return;
+    fig.querySelector("img").addEventListener("error",function(){
+      fig.hidden=true;
+      if(--live===0){var b=document.getElementById("qrblock"); if(b)b.hidden=true;}
+    });
+  });
+})();
+
+/* the poster block only exists if the artwork is actually there */
+(function(){
+  var img=document.getElementById("posterImg");
+  if(!img)return;
+  /* no artwork yet: hide the whole block rather than show a broken image */
+  img.addEventListener("error",function(){
+    var sec=document.getElementById("poster-block");
+    if(sec)sec.hidden=true;
+  });
+})();
+
+/* ============================== boot ============================== */
+renderCal();
+monthList();
+renderArchive("all");
+calendarKey();
+renderPosters();
+(function(){
+  /* year range must include entries whose day is not known yet */
+  var yrs=EVENTS.map(function(e){return parts(e.d).y;}).filter(function(y){return y>0;});
+  document.getElementById("archStat").textContent=
+    EVENTS.length+" events · "+Math.min.apply(null,yrs)+"–"+Math.max.apply(null,yrs);
+})();
+route();
+syncNav();
+Field.resize();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(Field.resize);
+</script>

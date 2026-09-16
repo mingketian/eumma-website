@@ -1,0 +1,7 @@
+# Internal board material: planning notes, draft history, research.
+# Kept out of the public repository on purpose.
+.internal/
+
+.DS_Store
+*.swp
+__pycache__/
