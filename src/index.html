@@ -1521,6 +1521,11 @@ footer.site{position:relative}
 </footer>
 
 <script>
+/* Build stamp. build_public.py rewrites this; it is appended to every image
+   URL so a replaced file is not served from a stale browser cache.          */
+var ASSET_V="dev";
+function v(u){return u+"?v="+ASSET_V;}
+
 /* ============================== data ============================== */
 var EVENTS=[
   {d:"2026-10-16",t:"Research Panel",time:"TBC",room:"TBC",cat:"research",desc:"Undergraduates who have done research explain how they found a first project: which emails they sent, when, and what they had taken beforehand. Faculty answer what they look for."},
@@ -1956,7 +1961,7 @@ function loadPhotos(){
   var MAX=40, shown=0;
   function tryOne(i){
     if(i>MAX)return;
-    var n=(i<10?"0":"")+i, src="photos/"+n+".jpg";
+    var n=(i<10?"0":"")+i, src=v("photos/"+n+".jpg");
     var img=new Image();
     img.onload=function(){
       var a=document.createElement("a");
@@ -1985,7 +1990,7 @@ function fillPortraits(){
     var img=document.createElement("img");
     img.alt=h.textContent.trim();
     img.addEventListener("error",function(){img.remove();});
-    img.src="people/"+slug+".jpg";
+    img.src=v("people/"+slug+".jpg");
     ph.appendChild(img);
   });
 }
@@ -2020,9 +2025,9 @@ function renderPosters(){
       img.parentNode.insertBefore(a,img);a.appendChild(img);
     });
     img.addEventListener("error",function(){
-      if(++k<exts.length){img.src=base+exts[k];}else{fig.remove();}
+      if(++k<exts.length){img.src=v(base+exts[k]);}else{fig.remove();}
     });
-    img.src=base+exts[0];
+    img.src=v(base+exts[0]);
     fig.appendChild(img);
     grid.appendChild(fig);
   });

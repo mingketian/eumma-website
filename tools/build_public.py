@@ -115,6 +115,22 @@ def main():
         print(f"  {sub}/  {len(files)} file(s)")
     if total: print(f"  images total: {total//1024} KB")
 
+    # stamp every asset URL so replaced files are not served from a stale cache
+    import hashlib
+    h = hashlib.sha1()
+    for root, _, fs in os.walk(OUT):
+        for f in sorted(fs):
+            if f.endswith((".jpg", ".jpeg", ".png")):
+                h.update(f.encode())
+                h.update(str(os.path.getsize(os.path.join(root, f))).encode())
+    stamp = h.hexdigest()[:8]
+    page = io.open(os.path.join(OUT, "index.html"), encoding="utf-8").read()
+    page = page.replace('var ASSET_V="dev";', f'var ASSET_V="{stamp}";')
+    page = re.sub(r'(src|href)="((?:posters/|photos/|people/)?[\w.-]+\.(?:jpg|jpeg|png))"',
+                  lambda m: f'{m.group(1)}="{m.group(2)}?v={stamp}"', page)
+    io.open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(page)
+    print(f"  asset stamp: {stamp}")
+
     print(f"\nwrote {OUT}/index.html")
 
 main()

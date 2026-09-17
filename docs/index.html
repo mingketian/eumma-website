@@ -1382,13 +1382,13 @@ footer.site{position:relative}
         <figure class="qr" id="qrGroupme">
           <span class="k">Day to day</span>
           <h3>GroupMe</h3>
-          <img src="qr-groupme.png" alt="QR code to join the EUMMA GroupMe">
+          <img src="qr-groupme.png?v=277b4d61" alt="QR code to join the EUMMA GroupMe">
           <figcaption>Scan to join the group chat. Where events are announced first.</figcaption>
         </figure>
         <figure class="qr" id="qrWechat">
           <span class="k">Day to day</span>
           <h3>WeChat</h3>
-          <img src="qr-wechat.png" alt="QR code to join the EUMMA WeChat group">
+          <img src="qr-wechat.png?v=277b4d61" alt="QR code to join the EUMMA WeChat group">
           <figcaption>Scan to join <span class="mono">EUMMA 26-27</span>.</figcaption>
         </figure>
       </div>
@@ -1403,7 +1403,7 @@ footer.site{position:relative}
         <p>Our 2025&ndash;26 poster. Select it to see it full size; print it or repost it, since it carries both QR codes.</p>
       </div>
       <figure class="poster" id="posterFig">
-        <a href="eumma-poster-2025.png" target="_blank" rel="noopener"><img id="posterImg" src="eumma-poster-2025.png" alt="EUMMA recruitment poster: the Emory Undergraduate MatheMatics Association, its four pillars, the events it runs, and QR codes for the Emory Hub and the GroupMe."></a>
+        <a href="eumma-poster-2025.png?v=277b4d61" target="_blank" rel="noopener"><img id="posterImg" src="eumma-poster-2025.png?v=277b4d61" alt="EUMMA recruitment poster: the Emory Undergraduate MatheMatics Association, its four pillars, the events it runs, and QR codes for the Emory Hub and the GroupMe."></a>
         <figcaption>
           <span class="mono">EUMMA recruitment poster &middot; 2025&ndash;26</span>
           <span class="mono">Emory Hub &amp; GroupMe QR codes included</span>
@@ -1510,6 +1510,11 @@ footer.site{position:relative}
 </footer>
 
 <script>
+/* Build stamp. build_public.py rewrites this; it is appended to every image
+   URL so a replaced file is not served from a stale browser cache.          */
+var ASSET_V="277b4d61";
+function v(u){return u+"?v="+ASSET_V;}
+
 /* ============================== data ============================== */
 var EVENTS=[
   {d:"2026-10-16",t:"Research Panel",time:"TBC",room:"TBC",cat:"research",desc:"Undergraduates who have done research explain how they found a first project: which emails they sent, when, and what they had taken beforehand. Faculty answer what they look for."},
@@ -1941,7 +1946,7 @@ function loadPhotos(){
   var MAX=40, shown=0;
   function tryOne(i){
     if(i>MAX)return;
-    var n=(i<10?"0":"")+i, src="photos/"+n+".jpg";
+    var n=(i<10?"0":"")+i, src=v("photos/"+n+".jpg");
     var img=new Image();
     img.onload=function(){
       var a=document.createElement("a");
@@ -1970,7 +1975,7 @@ function fillPortraits(){
     var img=document.createElement("img");
     img.alt=h.textContent.trim();
     img.addEventListener("error",function(){img.remove();});
-    img.src="people/"+slug+".jpg";
+    img.src=v("people/"+slug+".jpg");
     ph.appendChild(img);
   });
 }
@@ -2005,9 +2010,9 @@ function renderPosters(){
       img.parentNode.insertBefore(a,img);a.appendChild(img);
     });
     img.addEventListener("error",function(){
-      if(++k<exts.length){img.src=base+exts[k];}else{fig.remove();}
+      if(++k<exts.length){img.src=v(base+exts[k]);}else{fig.remove();}
     });
-    img.src=base+exts[0];
+    img.src=v(base+exts[0]);
     fig.appendChild(img);
     grid.appendChild(fig);
   });
