@@ -558,17 +558,13 @@ table.glance .mid{color:var(--t-connect);font-weight:600}
 .postergrid img{display:block;width:100%;height:auto;border:1px solid var(--rule);background:var(--paper)}
 
 /* ============================ join QR codes ============================ */
-.qrs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,240px));gap:1.25rem;margin-top:1.75rem}
-.qr{margin:0;border:1px solid var(--rule);background:var(--white);padding:.9rem}
-.qr img{display:block;width:100%;height:auto;background:var(--paper)}
-.qr figcaption{
-  margin-top:.75rem;padding-top:.7rem;border-top:1px solid var(--rule-2);
-  font-size:.8rem;color:var(--ink-2);line-height:1.5;
-}
-.qr figcaption .k{
-  display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:.25rem;
-}
+.qrs{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-top:0}
+@media(max-width:560px){.qrs{grid-template-columns:1fr}}
+.qr{margin:0;background:var(--white);padding:1.45rem 1.35rem;display:flex;flex-direction:column;gap:.5rem}
+.qr .k{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.qr h3{font-size:1rem;font-weight:600}
+.qr img{display:block;width:100%;max-width:190px;height:auto;margin-top:.5rem;border:1px solid var(--rule-2);background:var(--paper)}
+.qr figcaption{margin-top:.6rem;font-size:.85rem;color:var(--ink-2);line-height:1.55}
 
 /* ============================ poster ============================ */
 .poster{margin:0;max-width:600px;border:1px solid var(--rule);background:var(--paper);padding:clamp(.7rem,1.6vw,1.1rem)}
@@ -1043,7 +1039,7 @@ footer.site{position:relative}
         <p>Every route into research open to an Emory undergraduate, with the one thing about each that is easy to miss.</p>
       </div>
 
-      <div class="channels">
+      <div class="channels three">
         <div class="lead">
           <span class="k">Start here</span>
           <h4>Directed Reading Program</h4>
@@ -1368,13 +1364,6 @@ footer.site{position:relative}
           <a class="go" href="https://thehub.emory.edu/EUMMA/">thehub.emory.edu/EUMMA →</a>
         </div>
         <div>
-          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20.5l1.6-4.6A8.3 8.3 0 0 1 3.6 11.5 8.4 8.4 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"></path></svg>
-          <span class="k">Day to day</span>
-          <h3>GroupMe &amp; WeChat</h3>
-          <p>Where events are announced first, and where people ask what is happening this week.</p>
-          <span class="go pending">Links to be added</span>
-        </div>
-        <div>
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
           <span class="k">Follow</span>
           <h3>Instagram</h3>
@@ -1389,15 +1378,18 @@ footer.site{position:relative}
           <a class="go" href="mailto:mingke.tian@emory.edu">mingke.tian@emory.edu</a>
         </div>
       </div>
-
       <div class="qrs" id="qrblock">
         <figure class="qr" id="qrGroupme">
+          <span class="k">Day to day</span>
+          <h3>GroupMe</h3>
           <img src="qr-groupme.png" alt="QR code to join the EUMMA GroupMe">
-          <figcaption><span class="k">GroupMe</span>Scan to join the group</figcaption>
+          <figcaption>Scan to join the group chat. Where events are announced first.</figcaption>
         </figure>
         <figure class="qr" id="qrWechat">
+          <span class="k">Day to day</span>
+          <h3>WeChat</h3>
           <img src="qr-wechat.png" alt="QR code to join the EUMMA WeChat group">
-          <figcaption><span class="k">WeChat</span>Scan to join <span class="mono">EUMMA 25-26</span></figcaption>
+          <figcaption>Scan to join <span class="mono">EUMMA 25-26</span>.</figcaption>
         </figure>
       </div>
     </div>
