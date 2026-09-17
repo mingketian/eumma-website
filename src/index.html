@@ -581,8 +581,10 @@ table.glance .mid{color:var(--t-connect);font-weight:600}
 }
 
 /* ============================ poster ============================ */
-.poster{margin:0;border:1px solid var(--rule);background:var(--paper);padding:clamp(.75rem,2vw,1.5rem)}
-.poster img{display:block;width:100%;height:auto;border:1px solid var(--rule);background:var(--white)}
+.poster{margin:0;max-width:600px;border:1px solid var(--rule);background:var(--paper);padding:clamp(.7rem,1.6vw,1.1rem)}
+.poster a{display:block;line-height:0}
+.poster img{display:block;width:100%;height:auto;border:1px solid var(--rule);background:var(--white);transition:opacity .16s ease}
+.poster a:hover img{opacity:.88}
 .poster figcaption{
   display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;justify-content:space-between;
   margin-top:.85rem;padding-top:.7rem;border-top:1px solid var(--rule);
@@ -1455,10 +1457,10 @@ footer.site{position:relative}
       <div class="sechead">
         <p class="lab">Poster</p>
         <h2>Poster</h2>
-        <p>Our 2025&ndash;26 poster. Print it or repost it. It carries both QR codes.</p>
+        <p>Our 2025&ndash;26 poster. Select it to see it full size; print it or repost it, since it carries both QR codes.</p>
       </div>
       <figure class="poster" id="posterFig">
-        <img id="posterImg" src="eumma-poster-2025.png" alt="EUMMA recruitment poster: the Emory Undergraduate MatheMatics Association, its four pillars, the events it runs, and QR codes for the Emory Hub and the GroupMe.">
+        <a href="eumma-poster-2025.png" target="_blank" rel="noopener"><img id="posterImg" src="eumma-poster-2025.png" alt="EUMMA recruitment poster: the Emory Undergraduate MatheMatics Association, its four pillars, the events it runs, and QR codes for the Emory Hub and the GroupMe."></a>
         <figcaption>
           <span class="mono">EUMMA recruitment poster &middot; 2025&ndash;26</span>
           <span class="mono">Emory Hub &amp; GroupMe QR codes included</span>
