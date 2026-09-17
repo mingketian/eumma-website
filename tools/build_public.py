@@ -51,7 +51,7 @@ def main():
         start = s.rindex("<section", 0, i)
         end = s.index("</section>", i) + len("</section>")
         block = s[start:end]
-        if not re.search(r'<div class="person">', block):
+        if not re.search(r'<div class="person[ "]', block):
             s = s[:start] + s[end:]
             report.append(f'empty section removed: {marker}')
 
